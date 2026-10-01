@@ -1,0 +1,39 @@
+[package]
+name = "redactify"
+version = "0.3.0"
+edition = "2021"
+rust-version = "1.80"
+description = "Checksum-validated PII detection & redaction for structured identifiers - ships with Turkish identifiers (TCKN, IBAN, VKN, plates), extensible to other locales"
+license = "Apache-2.0"
+keywords = ["pii", "redaction", "privacy", "masking", "gdpr"]
+categories = ["text-processing"]
+
+# v2 planı: kapsam büyürse workspace'e bölün - crates/{redactify-core, redactify-cli, redactify-wasm}
+# v1'de tek package yeterli (Cargo Packages & Crates kuralı: lib + bin aynı package'ta olabilir).
+
+[features]
+default = []
+# ONNX Runtime for ML inference (optional). download-binaries fetches the
+# ONNX Runtime shared library automatically at build time.
+ml-onnx = ["ort"]
+
+[dependencies]
+# Small, auditable dependencies - no models, no network (zero-model core principle).
+# fancy-regex: lookaround-capable backtracking engine; boundary semantics
+# locked by the differential suite.
+fancy-regex = "0.13"
+# unicode-normalization: guardrails L0 - NFKC (homoglyph/fullwidth evasion defense).
+unicode-normalization = "0.1"
+# base64: guardrails L0 - suspect payload decoding + re-scan.
+base64 = "0.22"
+# serde_json: guardrails L4 - JSON schema validation of LLM output.
+serde_json = "1"
+# ONNX Runtime bindings (optional, behind ml-onnx feature).
+ort = { version = "2.0.0-rc.9", features = ["download-binaries"], optional = true }
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "pii"
+harness = false

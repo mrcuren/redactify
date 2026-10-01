@@ -1,0 +1,13 @@
+# Rust derleme çıktıları
+/target
+
+# Yerel çalışma alanları (repoya ait değil)
+/.zcode/
+/learn/
+
+# İç araştırma notları — kasıtlı olarak repoya dahil değildir
+/research/
+
+# Editör/OS
+.DS_Store
+Thumbs.db
