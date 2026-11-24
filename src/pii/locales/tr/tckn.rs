@@ -30,6 +30,10 @@ pub fn valid_tckn(n: &str) -> bool {
     // The weighted difference can be NEGATIVE: i32 + rem_euclid gives a non-negative modulo.
     let d10 = ((sum_odd as i32) * 7 - sum_even as i32).rem_euclid(10) as u32;
     let d11 = (d[0..10].iter().sum::<u32>()) % 10;
+    // Repeated-digit values (`11111111110` ... `99999999990`) pass both
+    // check digits and are deliberately NOT rejected: no official source
+    // states that such numbers are never issued, and for a redactor masking
+    // a dummy value is harmless while dropping a real one would leak it.
     d[9] == d10 && d[10] == d11
 }
 
@@ -37,13 +41,60 @@ use crate::pii::entity::EntityType;
 
 use crate::pii::locales::{rule, ContextPolicy, Rule};
 
+/// The contiguous 11 digits, or the dotted `232.475.469.02` (3-3-3-2; 20
+/// values in piimask-eval-tr-en). The dotted form is
+/// claimed cue-less like the contiguous one: the two check digits gate
+/// both, and the grouping is no number format (a thousands separator
+/// groups by three from the right). It is never cut out of a longer number
+/// or an amount: no digit, dot or comma before it (the lookbehind after the
+/// match) and no digit, or dot or comma plus digit, after it. Both forms
+/// share one pattern: a separate rule would scan every line once more
+/// (about 50 ms per 25 000 nm-kvkk/piimask lines with
+/// fancy-regex 0.20), while the extra branch costs nothing measurable.
 #[allow(clippy::redundant_pub_crate)]
 pub(crate) fn rule() -> Rule {
     rule!(
         EntityType::Tckn,
-        r"(?<!\d)[1-9]\d{10}(?!\d)",
-        Some(valid_tckn),
+        r"(?<!\d)[1-9]\d{2}(?:\d{8}(?!\d)|\.\d{3}\.\d{3}\.\d{2}(?![\d]|[.,]\d)(?<![.,]\d{3}\.\d{3}\.\d{3}\.\d{2}))",
+        Some(valid_grouped_tckn),
         ContextPolicy::None,
+        1.0
+    )
+}
+
+/// [`valid_tckn`] over the 11 digits of a candidate, contiguous or grouped
+/// (one kind of separator, already enforced by the rule patterns).
+fn valid_grouped_tckn(s: &str) -> bool {
+    crate::pii::locales::code_chars::<11>(s, u8::is_ascii_digit, b". ")
+        .is_some_and(|d| std::str::from_utf8(&d).is_ok_and(valid_tckn))
+}
+
+/// TCKN cue words (normalized form) for the cue-gated grouped shapes.
+const CUES: &[&str] = &[
+    "tc",
+    "t.c.",
+    "tckn",
+    "kimlik",
+    "vatandaslik",
+    "vatandaşlik",
+    "identity",
+];
+
+/// TCKN grouped with spaces (`275 395 931 48`, 3-3-3-2) or as a
+/// thousands-grouped number (`17.291.716.060`, `17 291 716 060`, 2-3-3-3),
+/// only next to a TCKN cue. In labelled fixtures, spaced 3-3-3-2 values
+/// follow "kimlik", while the valid TCKN "172 917 160 60" also appears
+/// without a cue as a plain number; a 2-3-3-3 group is how an 11-digit
+/// amount is written, and about one amount in a hundred passes the two
+/// check digits.
+#[allow(clippy::redundant_pub_crate)]
+pub(crate) fn thousands_rule() -> Rule {
+    rule!(
+        id = "tr::tckn_cued",
+        EntityType::Tckn,
+        r"(?<![\d.,])[1-9]\d(?:\.\d{3}\.\d{3}\.\d{3}| \d{3} \d{3} \d{3}|\d \d{3} \d{3} \d{2})(?![\d]|[.,]\d)",
+        Some(valid_grouped_tckn),
+        ContextPolicy::RequiredCue(CUES),
         1.0
     )
 }
@@ -51,6 +102,57 @@ pub(crate) fn rule() -> Rule {
 #[cfg(test)]
 mod tests {
     use super::valid_tckn;
+    use crate::pii::detect::engine_detect;
+    use crate::EntityType;
+
+    fn tckns(text: &str) -> Vec<String> {
+        engine_detect(text, &["tr"])
+            .into_iter()
+            .filter(|e| e.kind == EntityType::Tckn)
+            .map(|e| e.text)
+            .collect()
+    }
+
+    #[test]
+    fn grouped_forms_are_claimed_whole() {
+        for (text, want) in [
+            ("T.C. kimlik 232.475.469.02 şeklinde", "232.475.469.02"),
+            ("Kimlik: 275 395 931 48", "275 395 931 48"),
+            ("kimlik no 17 291 716 060 kayıtlı", "17 291 716 060"),
+            ("TC kimlik 17.291.716.060 doğrulandı", "17.291.716.060"),
+        ] {
+            assert_eq!(tckns(text), [want], "{text}");
+        }
+    }
+
+    #[test]
+    fn grouped_forms_keep_their_guards() {
+        // wrong check digits
+        assert!(tckns("kimlik 232.475.469.03").is_empty());
+        // the thousands shape without a cue is an amount
+        assert!(tckns("toplam 17.291.716.060 TL").is_empty());
+        assert!(tckns("toplam 17 291 716 060 TL").is_empty());
+        // the spaced 3-3-3-2 shape without a cue is a plain number
+        assert!(tckns("Sayı 172 917 160 60 boşluklu yazılmış").is_empty());
+        // never cut out of a longer number or a mixed grouping
+        assert!(tckns("1.232.475.469.02").is_empty());
+        assert!(tckns("232.475.469.02.5").is_empty());
+        assert!(tckns("232.475 469.02").is_empty());
+    }
+
+    #[test]
+    fn long_hostile_lines_complete_within_the_backtrack_budget() {
+        for r in [super::rule(), super::thousands_rule()] {
+            for unit in ["1", "1.", "1 ", "12.", "123 ", "a"] {
+                let text = unit.repeat(200_000 / unit.len());
+                assert!(
+                    r.regex.find_iter(&text).all(|m| m.is_ok()),
+                    "{} on {unit:?}",
+                    r.id
+                );
+            }
+        }
+    }
 
     #[test]
     fn golden_vectors() {

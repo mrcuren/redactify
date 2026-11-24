@@ -1,12 +1,19 @@
 //! US passport number: detection rule (Next Generation format).
 //!
-//! Source of the pattern: the open-source industry PII analyzer (US passport
-//! recognizer). Two patterns exist there: a bare 9-digit form (scored "very
-//! weak") and the Next Generation `[A-Z][0-9]{8}` form (weak). Only the Next
-//! Generation form is ported here, and - like the Turkish passport rule - a
-//! nearby cue is MANDATORY: with no checksum, a bare letter+8-digits token must
-//! not be claimed on its own. The 9-digit-only form is deliberately not ported
-//! (it would collide with order IDs and card fragments).
+//! Official source: U.S. Department of State, "Design and Security of our
+//! Documents", section "Next Generation Passport"
+//! (<https://travel.state.gov/en/passports/apply/help/security-design.html>,
+//! retrieved 2026-10-30; the page answered 403 on a re-check on
+//! 2026-10-31): "Another important feature is a
+//! perforated alphanumeric passport number on every page, which is a letter
+//! followed by 8 numbers".
+//!
+//! The rule takes exactly that shape (`[A-Z]` + 8 digits). No checksum
+//! exists, so - like the Turkish passport rule - a nearby cue is
+//! MANDATORY: a bare letter + 8 digits token is never claimed on its own.
+//! The older all-numeric 9-digit form is not covered: no official source
+//! for it was found, and a bare 9-digit run would collide
+//! with order ids and other cue-gated identifiers.
 
 use crate::pii::entity::EntityType;
 use crate::pii::locales::{rule, ContextPolicy, Rule};
@@ -19,12 +26,13 @@ pub fn valid_us_passport(s: &str) -> bool {
     b.len() == 9 && b[0].is_ascii_uppercase() && b[1..].iter().all(u8::is_ascii_digit)
 }
 
-/// Cue words required to claim a candidate (industry context list, minus the
-/// two-letter word `us` which is a common English pronoun and would fire on
-/// ordinary text).
+/// Cue words required to claim a candidate. Not `us` (a common English
+/// pronoun); " states" carries a leading space because "states" is a
+/// substring of "estates" (the label usage "United States" keeps the
+/// space; "united" covers a line that starts with the country name).
 pub(super) const CUES: &[&str] = &[
     "united",
-    "states",
+    " states",
     "passport",
     "passport no",
     "passport number",

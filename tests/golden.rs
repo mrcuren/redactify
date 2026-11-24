@@ -1,7 +1,9 @@
 //! Golden vectors - a verified behavior set (run against the differential suite).
 
 use redactify::{
-    detect, redact, valid_iban_tr, valid_luhn, valid_plaka, valid_tckn, valid_vkn, EntityType,
+    detect, redact, valid_br_cnpj, valid_br_cpf, valid_cn_resident_id, valid_dk_cpr, valid_eu_vat,
+    valid_fi_hetu, valid_iban_tr, valid_luhn, valid_no_fodselsnummer, valid_plaka,
+    valid_se_personnummer, valid_tckn, valid_vkn, EntityType,
 };
 
 // ---------------------------------------------------------------- validators
@@ -31,7 +33,52 @@ fn vkn_luhn_plaka_vectors() {
     assert!(valid_luhn("4111111111111111"));
     assert!(!valid_luhn("4111111111111112"));
     assert!(valid_plaka("34 ABC 123"));
-    assert!(!valid_plaka("99 ABC 123")); // 99. il yok
+    assert!(!valid_plaka("99 ABC 123")); // there is no province 99
+}
+
+/// National IDs: official worked examples (valid), single corrupted check
+/// characters (invalid) and the edges each source states.
+#[test]
+fn national_id_vectors() {
+    // BR CPF (Receita routine): computed vectors + the routine's rejection
+    assert!(valid_br_cpf("529.982.247-25"));
+    assert!(valid_br_cpf("52998224725"));
+    assert!(!valid_br_cpf("529.982.247-52"));
+    assert!(!valid_br_cpf("00000000000"));
+    // BR CNPJ (Receita manual + FAQ): alphanumeric and numeric generations
+    assert!(valid_br_cnpj("12.ABC.345/01DE-35"));
+    assert!(valid_br_cnpj("12.345.678/0001-95"));
+    assert!(valid_br_cnpj("AA345678/000A-29"));
+    assert!(valid_br_cnpj("12.345.678/000A-08"));
+    assert!(!valid_br_cnpj("12.ABC.345/01DE-53"));
+    assert!(!valid_br_cnpj("AA345678/0003-29")); // FAQ format illustration
+                                                 // CN resident ID (GB 11643-1999 annex A)
+    assert!(valid_cn_resident_id("11010519491231002X"));
+    assert!(valid_cn_resident_id("440524188001010014"));
+    assert!(!valid_cn_resident_id("110105194912310020"));
+    assert!(!valid_cn_resident_id("440524188001010041"));
+    // SE personnummer (SKV 704)
+    assert!(valid_se_personnummer("640823-3234"));
+    assert!(valid_se_personnummer("640823+3234"));
+    assert!(valid_se_personnummer("196408233234"));
+    assert!(!valid_se_personnummer("640823-3243"));
+    // FI henkilötunnus (decree 690/2022 table; computed vectors)
+    assert!(valid_fi_hetu("131052-308T"));
+    assert!(valid_fi_hetu("010594Y9032"));
+    assert!(!valid_fi_hetu("131052-380T"));
+    // NO fødselsnummer (Skatteetaten examples, old and 2032 rules)
+    assert!(valid_no_fodselsnummer("02013299997"));
+    assert!(valid_no_fodselsnummer("30108299920"));
+    assert!(valid_no_fodselsnummer("30108299939"));
+    assert!(!valid_no_fodselsnummer("02013299979"));
+    // DK CPR (CPR office example; date only, no modulus 11)
+    assert!(valid_dk_cpr("070761-4285"));
+    assert!(valid_dk_cpr("070761-4286"));
+    assert!(!valid_dk_cpr("310461-4285")); // 31 April
+                                           // EU VAT (VIES structure)
+    assert!(valid_eu_vat("ATU12345678"));
+    assert!(valid_eu_vat("NL123456789B01"));
+    assert!(!valid_eu_vat("ATU1234567"));
 }
 
 // ------------------------------------------------------------------- redact
@@ -63,7 +110,7 @@ fn vkn_needs_context_not_bare_10_digits() {
         redact("Sipariş 1234567890 hazır."),
         "Sipariş 1234567890 hazır."
     );
-    // ipucu varken VKN maskelenir
+    // with a cue nearby the VKN is masked
     assert!(redact("Firmanın vergi numarası 1234567890.").contains("[VKN]"));
     assert!(redact("VKN 1234567890 kullanın.").contains("[VKN]"));
 }
@@ -92,8 +139,8 @@ fn edge_probes() {
         vec![(EntityType::Plaka, "06 ANK 06".into())]
     );
     assert_eq!(
-        one("Plaka 06 AAA 9999"),
-        vec![(EntityType::Plaka, "06 AAA 9999".into())]
+        one("Plaka 06 AA 9999"),
+        vec![(EntityType::Plaka, "06 AA 9999".into())]
     );
     // two adjacent TCKNs
     assert_eq!(one("12345678950 ve 10000000146").len(), 2);

@@ -38,7 +38,9 @@ fn ssn_structural_rules_reject_invalids() {
         "666-45-6789",
         "123-00-6789",
         "123-45-0000",
-        "111-11-1111",
+        // repeated digits are accepted (no SSA source rejects them); the
+        // area rule still rejects 666-66-6666
+        "666-66-6666",
         "123456789",
     ] {
         assert!(

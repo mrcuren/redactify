@@ -23,6 +23,17 @@ fn char_to_byte(text: &str) -> Vec<usize> {
     map
 }
 
+/// The entity types the corpus labels (the image of [`parse_kind`]).
+const LABELED: [EntityType; 7] = [
+    EntityType::Tckn,
+    EntityType::Iban,
+    EntityType::Vkn,
+    EntityType::Plaka,
+    EntityType::Phone,
+    EntityType::Email,
+    EntityType::CreditCard,
+];
+
 fn parse_kind(s: &str) -> EntityType {
     match s {
         "TCKN" => EntityType::Tckn,
@@ -105,7 +116,14 @@ fn full_span_parity_with_reference_labels() {
             );
             continue;
         }
-        // exact span matching (not mere overlap - full parity)
+        // exact span matching (not mere overlap - full parity) over the
+        // corpus label set: the corpus labels seven types, so a detection of
+        // a type it never labels (the card expiry `12/28` after "son
+        // kullanma" in the card lines) is outside its reference, not a miss
+        let found: BTreeSet<_> = found
+            .into_iter()
+            .filter(|(kind, _, _)| LABELED.contains(kind))
+            .collect();
         assert_eq!(
             found, gold,
             "line {i}: text={:?} gold={:?} found={:?}",

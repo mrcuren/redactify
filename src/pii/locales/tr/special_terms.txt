@@ -1,0 +1,3190 @@
+# Terms of the KVKK art. 6 special-category scanner (special.rs). One
+# lowercase term per line under `@<category> [flags]` sections; flags:
+# i inflects, m medication (a dose joins the span), c capitalized only,
+# o origin word ("kökenli" joins the span), b blood-group cue, p
+# organisation head (the capitalized name before it is the term), u the
+# link window must hold "üye". Provenance: special_terms.SOURCES.md.
+#
+# Project-curated sections (redactify contributors, MIT OR Apache-2.0),
+# compiled from the categories and examples of Law No. 6698 art. 6 and the
+# KVKK guide "Özel Nitelikli Kişisel Verilerin İşlenmesine İlişkin Rehber"
+# (2025); the guide page each example comes from is noted.
+@health b
+# guide p. 22: the blood group is health data
+kan grubu
+@health is
+# guide p. 21-22: diagnosis, illness, treatment, prescriptions, physical
+# therapy, psychiatry appointments; p. 33 (art. 6 conditions): disability.
+# Generic words: only with their own first/second person suffix
+hastalık
+rahatsızlık
+sakatlık
+engellilik
+maluliyet
+engelli
+malul
+ameliyat
+hamilelik
+gebelik
+@health i
+epilepsi
+kanser
+şeker hastası
+psikiyatri
+psikiyatrik tedavi
+psikolojik tedavi
+fizik tedavi
+kemoterapi
+radyoterapi
+diyaliz
+hamile
+@health im
+insülin
+@genetic is
+# words naming the category: only with their own person suffix
+genetik veri
+@genetic i
+# guide p. 27-28: DNA, RNA and chromosome analyses, genetic samples and
+# tests and their results
+genetik test
+genetik testi
+genetik analiz
+genetik analizi
+genetik profil
+genetik hastalık
+genetik yatkınlık
+dna testi
+dna analizi
+dna profili
+rna analizi
+kromozom analizi
+karyotip
+taşıyıcılık testi
+@biometric is
+# words naming the category: only with their own person suffix
+biyometrik veri
+@biometric i
+# guide p. 25-27: fingerprint, palm, hand geometry, iris, face and retina
+# recognition, DNA recognition; gait, keystroke and driving style
+biyometrik kayıt
+biyometrik şablon
+parmak izi
+avuç içi izi
+el geometrisi
+iris taraması
+iris tanıma
+retina taraması
+retina tanıma
+yüz tanıma
+yüz şablonu
+ses izi
+yürüyüş biçimi
+klavyeye basış biçimi
+@sex_life is
+# words naming the category: only with their own person suffix
+cinsel yönelim
+cinsel hayat
+cinsel yaşam
+@sex_life i
+# guide p. 23: sexual activities and relations
+cinsel ilişki
+cinsel partner
+eşcinsel
+heteroseksüel
+biseksüel
+aseksüel
+lezbiyen
+@criminal i
+# guide p. 23-24: convictions in the criminal record, imprisonment, fines,
+# conditional release, security measures (TCK art. 53 ff.), withdrawal of
+# the driving licence
+adli sicil kaydı
+sabıka kaydı
+sabıkalı
+mahkûmiyet
+mahkumiyet
+mahkûm
+mahkum
+hükümlü
+hapis cezası
+adli para cezası
+koşullu salıverilme
+denetimli serbestlik
+güvenlik tedbiri
+@criminal is
+cezaevi
+@criminal i
+@criminal x
+hapse
+hapiste
+hapisten
+@belief i
+# guide p. 16-17: religion (Islam, Christianity, Judaism), sects
+# (Protestantism, Catholicism), having no religion, worship
+müslüman
+islamiyet
+hristiyan
+hıristiyan
+hristiyanlık
+yahudi
+yahudilik
+musevi
+budist
+budizm
+hindu
+ateist
+ateizm
+agnostik
+deist
+dindar
+dinsiz
+inançsız
+sünni
+şii
+caferi
+katolik
+protestan
+ortodoks
+süryani
+ezidi
+yezidi
+bahai
+yehova şahidi
+tarikat üyesi
+@belief is
+# words naming the category: only with their own person suffix
+dini inanç
+mezhep
+@belief ic
+alevi
+@belief x
+dinim
+dinimi
+dinimin
+dinimden
+@ethnicity ic
+# guide p. 12: black and yellow race, Slav, Native American, Roma and
+# Chechen as examples; p. 13: nationality ("uyruk") is NOT special
+# (so no nationality words such as "Türk" or "yabancı uyruklu")
+kürt
+laz
+çerkez
+çerkes
+roman
+çingene
+ermeni
+rum
+zaza
+gürcü
+boşnak
+arnavut
+pomak
+abaza
+çeçen
+tatar
+slav
+kızılderili
+@ethnicity i
+siyahi
+@ethnicity is
+# words naming the category: only with their own person suffix
+etnik köken
+@ethnicity o
+# only with "kökenli"
+kafkas
+afrika
+@political is
+# words naming the category: only with their own person suffix
+siyasi görüş
+siyasi düşünce
+@political i
+# guide p. 14-16: party membership, being apolitical, socio-political
+# attitudes, the answer to "which party do you support?"
+parti üyesi
+parti üyeliği
+partili
+apolitik
+sosyalist
+komünist
+sosyal demokrat
+milliyetçi
+ülkücü
+kemalist
+anarşist
+solcu
+sağcı
+sol görüşlü
+sağ görüşlü
+@political p
+partisi
+parti
+@political cx
+chp
+akp
+mhp
+hdp
+@attire i
+# guide p. 18-19: dress and outward appearance ("kot pantolon", a beard),
+# to be judged case by case
+başörtüsü
+başörtülü
+türban
+türbanlı
+çarşaf
+çarşaflı
+peçe
+burka
+nikap
+tesettür
+tesettürlü
+kipa
+sakallı
+@attire is
+sakal
+@attire i
+kot pantolon
+@membership i
+# guide p. 20-21: association, foundation and trade-union membership
+sendika üyesi
+sendika üyeliği
+sendikaya üye
+sendikalı
+dernek üyesi
+dernek üyeliği
+derneğe üye
+vakıf üyesi
+vakıf üyeliği
+vakfa üye
+@membership pu
+derneği
+vakfı
+sendikası
+-sen
+#
+# Generated sections (Wikidata, CC0 1.0) follow; do not edit by hand.
+@health i
+# Wikidata (CC0): Turkish labels of items with an ICD-10 code (P494) in chapters A-Q or U07
+# (at least 8 sitelinks), and labels/aliases of disease-class items; no single dictionary, frequent or proper-noun word (see special_terms.SOURCES.md)
+1p36 delesyonu sendromu
+aagenaes sendromu
+aarskog-scott sendromu
+abdominal aort anevrizması
+abdominal gebelik
+abetalipoproteinemi
+abort
+abortus
+absans nöbet
+abuli
+achard-thiers sendromu
+acromegali
+acromegaly
+açık spina bifida
+addison hastalığı
+adenocarcinoma
+adenocarcinomata
+adenokarsinom
+adenokarsinoma
+adenom
+adenoma
+adenomata
+adenomatöz
+adenomyozis
+adermatoglifiya
+adhd
+adrenal yetmezlik
+adrenolökodistrofi
+aerofobi
+afaki
+afalli
+afazi
+afrika tripanosomiyazisi
+agalaksi
+agnozi
+agorafobi
+agrafi
+agranulositoz
+agranülositoz
+ağız kanseri
+ağız yanması sendromu
+ağrılı dentin sendromu
+aicardi sendromu
+ailevi akdeniz ateşi
+akalazya
+akalkuli
+akantoz
+akantozis nigrikans
+akatalazemi
+akatizi
+akciğer absesi
+akciğer embolisi
+akciğer hastalığı
+akciğer kanseri
+akciğer karsinomu
+akciğer ödemi
+akdeniz anemisi
+akdeniz kansızlığı
+akıl bozukluğu
+akıl hastalığı
+akinetopsi
+akne
+akne varioliformis
+akne vulgaris
+akondroplazi
+akrokordon
+akromatopsi
+akromegali
+akrosiyanoz
+akşamdan kalmalık
+akşınlık
+aktinik keratoz
+aktinomikoz
+akut böbrek yetmezliği
+akut bronşit
+akut glomerülonefrit
+akut koroner sendrom
+akut lenfoblastik lösemi
+akut myeloid lösemi
+akut myokard enfarktüsü
+akut pankreatit
+akut pulmoner histoplazmozis
+akut romatizmal ateş
+akut sistit
+akut solunum sıkıntısı sendromu
+akut stres tepkisi
+albinizim
+albinizm
+albinoluk
+alcapa sendromu
+aleksitimi
+alerjik konjonktivit
+alerjk rinit
+alfa-1-antitripsin eksikliği
+alınganlık düşünceleri
+alkaloz
+alkaptonüri
+alkol yoksunluk sendromu
+alkol zehirlenmesi
+alkolizm
+alopesi areata
+alopesi totalis
+alopesi üniversalis
+alström sendromu
+alt solunum yolu enfeksiyonu
+altıncı hastalık
+alzaymır
+alzheimer hastalığı
+ambliyopi
+ameloblastoma
+amelogenesis imperfecta
+amenore
+amfizem
+amiloidoz
+amnezi
+amniotik bant sendromu
+amyotrofik lateral skleroz
+amyotrophic lateral sclerosis
+anal kanser
+ancylostomiasis
+andersen-tawil sendromu
+anensefali
+anevrizma
+anfizem
+angelman sendromu
+angiosarkoma
+anhidrozis
+anhidrozlu konjenital ağrı duyarsızlığı
+anizokori
+anjina pektoris
+anjioödem
+ankiloz
+ankilozan spondilit
+anksiyete
+anksiyete bozukluğu
+anksiyete nevrozu
+anoksi
+anoreksia nervoza
+anoreksiya nervoza
+anorexia nevroza
+anorgazmi
+anorşi
+anovülasyon
+anozognozi
+anöplodi
+ansefalit
+anterograd amnezi
+antrakoz
+antraks
+antropofobi
+anüs kanseri
+aort diseksiyonu
+aort koarktasyonu
+aort stenozu
+apandisit
+apeced sendromu
+apert sendromu
+aplastik anemi
+apse
+araknofobi
+araknoid kist
+ards
+argyll robertson pupili
+aritmi
+aritmomani
+arnold-chiari malformasyonu
+arteriovenöz malformasyon
+arterit
+arteriyoskleroz
+artralji
+artrit
+artrogripozis
+asbestoz
+asidoz
+asistol
+asit erozyonu
+asperger bozukluğu
+asperger sendromu
+aspergillosis
+aspirasyon pnömonisi
+astım
+astigmatizma
+astrositom
+aşağılık duyguları
+aşağılık karmaşası
+aşağılık kompleksi
+aşırı aktif mesane
+at nalı böbrek
+ataksi-telanjiektazi
+atelektazi
+aterom
+ateroskleroz
+atipik depresyon
+atipik hemolitik üremik sendrom
+atipik pnömoni
+atopik dermatit
+atopik ekzema
+atriyal fibrilasyon
+atriyal septal defekt
+atrofi
+atrofik vajinit
+aura
+auralı veya aurasız migren
+auto-brewery syndrome
+avian flu
+ayak mantarı
+ayrılma kaygısı bozukluğu
+az bulunan hastalık
+azoospermia
+b12 vitamini eksikliği
+babesiosis
+babeşyoz
+bademcik taşı
+bağımlı kişilik bozukluğu
+bağırsak iltihabı
+bağırsak kanseri
+bağışıklık yetmezliği
+bakteriyel vajinoz
+balmumu esnekliği
+barbitürat zehirlenmesi
+bardet-biedl sendromu
+barrett özofagusu
+barth sendromu
+bartholin kisti
+basedow hastalığı
+bası yarası
+basınç ülseri
+basınç yarası
+basur
+bazal hücreli karsinom
+bazofili
+bebek sarılığı
+becker kas distrofisi
+beckwith-wiedemann sendromu
+beden dismorfik bozukluğu
+beemer-langer sendromu
+behçet
+behçet hastalığı
+behçet sendromu
+bel ağrısı
+bel soğukluğu
+bell's palsi
+bell's palsy
+belsoğukluğu
+benzodiazepin bağımlılığı
+benzodiazepin yoksunluk sendromu
+beri beri
+beriberi
+beriberi hastalığı
+berillioz
+bernard-horner sendromu
+bernard-soulier sendromu
+besin zehirlenmesi
+besnier-boeck hastalığı
+beyin arızası
+beyin bozukluğu
+beyin damar balocuğu
+beyin enfarktüsü
+beyin felci
+beyin hasarı
+beyin hastalığı
+beyin hastalıkları
+beyin herniasyonu
+beyin iltihabı
+beyin iskemisi
+beyin kanaması
+beyin ödemi
+beyin ölümü
+beyinit
+beyzbol parmağı
+bigoreksiya
+bilharyaz
+bilişsel bozukluk
+binswanger hastalığı
+bipolar
+bipolar bozukluk
+blefarit
+blefaropitozis
+bloom sendromu
+blumia
+blumia nevroza
+boğaz ağrısı
+boğaz kanseri
+boğaz yangısı
+boğazda yumru hissi
+boğmaca
+bombay kan grubu
+bor sendromu
+borderline
+borderline kişilik bozukluğu
+bordetella bronchiseptica
+borreliosis
+bosma arini mikroftalmi sendromu
+botulismus
+botulizm
+botülizm
+bouchard nodülleri
+bourneville hastalığı
+bourneville-pringle hastalığı
+bourneville-pringle sendromu
+bovin spongiform ensefalopati
+bovine spongiform encephalopathy
+bovine spongiform ensefalopati
+boy kısalığı
+böbrek hastalığı
+böbrek kanseri
+böbrek taşı
+böbrek yetmezliği
+bronkopnömoni
+bronkopulmoner displazi
+bronkospazm
+bronşektazi
+bronşit
+bronşiyolit
+bronşiyolitis obliterans
+brugada sendromu
+bruksizm
+bruselloz
+buerger hastalığı
+bulaşıcı hastalık
+bulaşıcı süngerimsi ensefalopati
+bulaşıcı süngerimsi ensefalopatiler
+bulaşıcı süngersi ensefalopati
+bulimia
+bulimia nervoza
+bulimiya
+bulimiya nervoza
+bulimiya nevroza
+bulumia
+bunama
+burger hastalığı
+burkitt lenfoması
+bursit
+buruli ülseri
+burun akıntısı
+burun polipleri
+burun taşı
+cam kemik hastalığı
+capgras delüzyonu
+caplan sendromu
+caput medusae
+carcinoma
+cardiac syndrome x
+caroli
+carpal tunnel sendromu
+chagas hastalığı
+charge sendromu
+charles bonnet sendromu
+cherubism
+chikungunya
+churg strauss sendromu
+cilt çatlağı
+cilt kanseri
+cinsel bağımlılık
+cinsel güç yetersizliği
+cinsel ilişki sonrası kanama
+cinsel işlev bozukluğu
+cinsel yolla bulaşan hastalıklar
+cinsiyet disforisi
+claude bernard-horner sendromu
+claude-bernard-horner sendromu
+clawhand
+cleidocranial dysostosis
+clostridioides difficile enfeksiyonu
+club foot
+coccidiosis
+conn sendromu
+cor pulmonale
+cornelia de lange sendromu
+cotard delüzyonu
+covıd-19
+covıd19
+crest sendromu
+creutzfeldt-jakob hastalığı
+cri du chat
+cri du chat sendromu
+cri-du-chat sendromu
+crohn hastalığı
+crouzon sendromu
+cryptorchidism
+cryptosporidiosis
+cushing hastalığı
+cushing sendromu
+cuzzam
+cücelik
+cüzam
+cüzzam
+çalma hastalığı
+çapraz kapanış
+çıban
+çiçek hastalığı
+çocuk felci
+çocukluğun dezintegratif bozukluğu
+çocukluk şizofrenisi
+çok ilaca dirençli tüberküloz
+çoklu hamilelik
+çoklu kişilik bozukluğu
+çoklu sistem körelmesi
+çölyak hastalığı
+d vitamini eksikliği
+daltonizm
+damla hastalığı
+dandy-walker malformasyonu
+dang humması
+darwin çıkıntısı
+davranış bozukluğu
+de quervain tenosinoviti
+de quervain tiroiditi
+dehb
+dehidratasyon
+dekstrokardi
+dekubitus ülseri
+dekübit
+dekübit ülseri
+deli dana
+deli dana hastalığı
+delirium tremens
+deliriyum
+deliriyum tremens
+deliryum tremens
+demans
+demir eksikliği
+demir eksikliği anemisi
+demiyelinizan hastalıklar
+demodikozis
+deng humması
+deniz tutması
+depersonalizasyon
+depersonalizasyon-derealizasyon bozukluğu
+depresyon
+derealizasyon
+deri hastalıkları
+deri kanseri
+derin ven trombozu
+derin venöz tromboz
+dermatillomani
+dermatit
+dermatofitoz
+dermatografik ürtiker
+dermatomiyozit
+dev hücreli arterit
+dev hücreli reparatif granülom
+dezorganize şizofreni
+dış gebelik
+dış kulak iltihabı
+diabetes insipidus
+diamond-blackfan anemisi
+diffüz panbronşiyolit
+difteri
+digeorge sendromu
+dikkat eksikliği hiperaktivite bozukluğu
+dil bozukluğu
+diphallia
+diplopi
+dirofilariyaz
+disfazi
+disidroz
+disk hernisi
+diskalkuli
+disleksi
+dislipidemi
+dismenore
+disosiyatif kimlik bozukluğu
+disotonomi
+disparoni
+disparöni
+displazi
+dissemine intravasküler koagülasyon
+dissosiyatif bozukluklar
+dissosiyatif kimlik bozukluğu
+distimik bozukluk
+distoni
+diş ağrısı
+diş apsesi
+diş eti çekilmesi
+diş eti iltihabı
+diş gıcırdatması
+diş kapanış bozuklukları
+divertikül
+divertiküler bağırsak hastalığı
+diyabet
+diyabetik ayak
+diyabetik ketoasidoz
+diyabetik koma
+diyabetik nefropati
+diyabetik nöropati
+diyabetik retinopati
+diyafram fıtığı
+diyare
+diz kapağı çıkması
+dizanteri
+dizanteri tedavisi
+doğaüstü parmak
+doğum sonrası depresyon
+doğum sonrası psikozu
+doğumsal kalça çıkığı
+doğuştan frengi
+doğuştan kalça çıkığı
+doğuştan metabolizma bozuklukları
+dolaşım durması
+dolikosefali
+domuz gribi
+donovanoz
+down sendromu
+drakunkuliyaz
+duane sendromu
+duchenne
+duchenne kas distrofisi
+dudak damak yarığı
+dudak-damak yarığı
+duodenit
+dupuytren kontraktürü
+duygudurum bozukluğu
+duygusal ve davranışsal bozukluklar
+dürtü kontrol bozukluğu
+düşük tansiyon
+düşünce bozukluğu
+düztabanlık
+ebola
+ectopia lentis
+edward sendromu
+edwards sendromu
+egzama
+ehler danlos sendromu
+ejaculatio praecox
+ekinokokkoz
+eklampsi
+eksoftalmus
+eksternal otit
+ekstrapiramidal semptomlar
+ekstrinsik alerjik alveolit
+ektodermal displazi
+ektopik gebelik
+ekzostoz
+el-ayak-ağız hastalığı
+elefantiyazis
+elephantiasis
+ellis-van creveld sendromu
+emboli
+emphysema
+empiyem
+empotans
+ender hastalık
+endokardit
+endokrin hastalıkları
+endometriosis
+endometriozis
+endometrit
+endometriyal kanser
+endometriyal polip
+enfeksiyöz hastalık
+enfeksiyöz hastalıklar
+enfeksiyöz mononükleoz
+enfestasyon
+enflüanza
+ensefalit
+ensefalit lethargica salgını
+ensefalopati
+ensefalosel
+enterokolit
+enürezis
+eozinofilik özofajit
+epidemik parotit
+epidermolizis bülloza
+epidural hematom
+epiglottit
+epilepsi
+epiloia
+erb felci
+erdheim chester hastalığı
+ereksiyon bozukluğu
+erişkin still hastalığı
+eritem
+eritema multiforme
+eritrazma
+eritromelalji
+eritroplaki
+erizipel
+erkek tipi saç dökülmesi
+erkeklerde kadınsı meme büyümesi
+erkeklerde kısırlık
+erkeklerde meme büyümesi
+erken boşalma
+erken climaks
+erken climax
+erken doğum
+erken ergenlik
+erken yaşlanma hastalığı
+erotomani
+et yiyen böcek hastalığı
+ewing sarkomu
+expressive aphasia
+fabry hastalığı
+fallot tetralojisi
+fanconi anemisi
+fanconi sendromu
+faranjit
+farber hastalığı
+farenjit
+fasciolosis
+fasial paralizi
+fasiyal palsi
+fasyoskapulohumeral musküler distrofi
+fazla kilo
+fenilketonuria
+fenilketonüri
+feokromositoma
+ferrous gluconate
+fetal alkol sendromu
+feto-fetal transfüzyon sendromu
+fırsatçı enfeksiyon
+fıtık
+fibroadenom
+fibrom
+fibromiyalji
+fibrotoraks
+fibröz displazi
+fil hastalığı
+filariasis
+filebit
+fistül
+flebit
+flebitis
+fobi
+fobiler
+fokomeli
+folikülit
+fordyce benekleri
+fotofobi
+fototoksisite
+fournier kangreni
+frajil x sendromu
+frambezi
+frengi
+friedreich ataksisi
+frijit
+frontalis akne
+frontotemporal demans
+fruktoz emilim bozukluğu
+fsgs
+gale-gal
+ganglion
+ganser sendromu
+gastrit
+gastro özofageal reflü
+gastroenterit
+gastroözofajiyel reflü
+gastroparezi
+gastroşizis
+gaucher hastalığı
+gazlı kangren
+gebelik kaybı
+gebelik komplikasyonları
+gebelikte covıd-19
+gece körlüğü
+geçici global amnezi
+geçici iskemik atak
+gelişimsel engelli
+gelişimsel kalça çıkığı
+gelişimsel kalça yetersizliği
+gelişimsel koordinasyon bozukluğu
+genetik bozukluk
+genetik bozukluklar
+genetik düzensizlikler
+genetik hastalık
+genetik hastalıklar
+genetik hastalıkların kökeni
+genikülat herpes zoster
+genişlemiş kardiyomiyopati
+genital herpes
+genital siğil
+german measles
+gerstmann sendromu
+gestasyonel diyabet
+gestasyonel trofoblastik hastalıklar
+gıda kaynaklı hastalıklar
+gıda zehirlenmesi
+gıda zehrlenmesi
+gırtlak kanseri
+giardiasis
+giardiyaz
+gigantizm
+gilbert sendromu
+gingivostomatit
+glioblastom
+gliom
+glokom
+glomerülonefrit
+glomus tümörü
+goldenhar syndrom
+goltz sendromu
+gonore
+goodpasture sendromu
+gorlin sendromu
+göbek fıtığı
+göğüs kanseri
+görsel karıncalanma
+göz dönmesi
+göz gribi
+göz kuruluğu
+göz tembelliği
+grand mal status epilepticus
+granuloma gravidarum
+granülomatozis
+granülomatöz amipli ensefalit
+graves hastalığı
+greig sendromu
+grip
+grover's hastalığı
+guatır
+guatr
+guillain barre
+guillain barre sendromu
+guillain-barre
+guillain-barre sendromu
+gut hastalığı
+gül hastalığı
+güneş yanığı
+haemophilus influenzae
+hafif bilişsel bozukluk
+halluks valgus
+hamartom
+hantavirüs pulmoner sendromu
+hareket hastalığı
+harlequin tipi iktiyozis
+hartnup hastalığı
+hashimoto tiroiditi
+hasta bina sendromu
+hastalık hastası
+hava embolisi
+hayalet ağrı
+hayalet uzuv
+hemangioperisitoma
+hemanjiyom
+hematemez
+hematospermia
+hematüri
+hemiparezi
+hemipleji
+hemofagositik lenfohistiyositoz
+hemofili
+hemofili a
+hemofili b
+hemoglobinopati
+hemokromatoz
+hemolitik üremik sendrom
+hemorajik ateş
+hemoroid
+hemoroitler
+hemotoraks
+henoch-schönlein purpurası
+hepatik ensefalopati
+hepatit
+hepatit a
+hepatit b
+hepatit c
+hepatit d
+hepatit e
+hepatorenal sendrom
+hepatosellüler karsinom
+herediter anjioödem
+herpes simpleks
+herpes virüs ensefaliti
+herpes zoster
+herpesvirus stomatitleri
+heterokromi
+hfrs
+hiatal herni
+hidradenitis süpürativa
+hidronefroz
+hidrosalpinks
+hidrosefali
+hidrosefalus
+hidrotoraks
+hifema
+hiperaktivite
+hiperakuzi
+hiperdaktili
+hiperdonti
+hiperglisemi
+hiperkalemi
+hiperkalsemi
+hiperkinezi
+hipermetrop
+hipermetropi
+hiperopi
+hiperparatiroidizm
+hiperpigmentasyon
+hiperprolaktinemi
+hipersalivasyon
+hiperseksüalite
+hipersomniya
+hipersplenizm
+hipertansif kriz
+hipertansiyon
+hipertelorizm
+hipertiroidi
+hipertrigliseridemi
+hipertrikoz
+hipertrofi
+hipertrofik kardiyomiyopati
+hipertrofik pilor stenozu
+hipervolemi
+hipodonti
+hipofosfatemi
+hipoglisemi
+hipogonadizm
+hipohidrotik ektodermal displazi
+hipokalemi
+hipokalemik periyodik felç
+hipokalsemi
+hipokobalaminemi
+hipokondriya
+hipoksi
+hipomani
+hiponatremi
+hipoparatiroidizm
+hipoproteinemi
+hipospadias
+hipotiroidi
+hipotoni
+hirsitusmus
+hirsutizm
+histeri
+histrionik kişilik bozukluğu
+hoçkin hastalığı
+hoçkin lenfoma
+hodgkin dışı lenfoma
+hodgkin hastalığı
+hodgkin lenfoma
+hodgkin lenfoması
+hodgkin's disease
+holoprosensefali
+homonim hemianopsi
+horner sendromu
+human papilloma virus
+human papillomavirus
+hunter sendromu
+huntington hastalığı
+huzursuz bacak sendromu
+ıtai itai sendromu
+iç organ layşmanyazisi
+içe çökük meme ucu
+idiyopatik pulmoner fibrozis
+idrar yolu enfeksiyonu
+idyopatik trombositopenik purpura
+iki uçlu bozukluk
+iktidarsızlık
+iktiyozis
+ilerleyici supranükleer felç
+ileus
+immün trombositopenik purpura
+impetigo
+impotans
+ince hastalık
+incinme
+infertilite
+inguinal herni
+inmemiş testis
+insan papilloma virüs
+insan papilloma virüsü
+insan papillomavirüs enfeksiyonu
+insan parainfluenza virüsü
+insanda saç biti istilası
+insomnia
+insomniyak
+insülin direnci
+insülinoma
+intersitisyel nefrit
+interstisyel akciğer hastalığı
+intrakraniyal anevrizma
+intraserebral kanama
+intrauterin gelişme geriliği
+iritabl barsak sendromu
+ishal
+iskemi
+iskemik kolit
+iskorbüt
+iskorbüt hastalığı
+istenmeyen düşünce
+iyi huylu prostat hiperplazisi
+iyi huylu tümör
+iyot eksikliği
+izole edilmiş polidaktili
+jacobsen sendromu
+jadassohn-lewandowsky sendromu
+jeneralize epilepsi
+jeofaji
+jet lag
+jinekomasti
+johanson-blizzard sendromu
+joubert sendromu
+juvenil kronik artrit
+kabızlık
+kabuki sendromu
+kaçınmacı kişilik bozukluğu
+kafein bağımlılığı
+kahler hastalığı
+kala-azar
+kalça çıkığı
+kalınbağırsak kanseri
+kalınbarsak kanseri
+kalıtsal hastalık
+kalıtsal hastalıklar
+kallmann sendromu
+kalp bozukluğu
+kalp damar hastalıkları
+kalp dış zarı iltihabı
+kalp durması
+kalp enfarktüsü
+kalp hastalığı
+kalp hastalıkları
+kalp kapak hastalığı
+kalp krizi
+kalp rahatsızlığı
+kalp ritim bozukluğu
+kalp sorunu
+kalp ve damar hastalıkları
+kalp yetmezliği
+kalp-damar hastalıkları
+kalsinoz
+kamburluk
+kan dolaşımı enfeksiyonları
+kan kanseri
+kan uyuşmazlığı
+kanabinoid hiperemesis sendromu
+kanamalı ateş
+kanamalı ateşi
+kandidiyaz
+kandidiyazis
+kandidoz
+kangren
+kannabis kullanım bozukluğu
+kansızlık
+kapalı spina bifida
+kaposi sarkomu
+kaposi's sarcoma
+kaposi's sarcoma-associated herpesvirus
+kar körlüğü
+kara ölüm
+karaciğer kanseri
+karaciğer sirozu
+karaciğer yağlanması
+karaciğer yetmezliği
+karahumma
+kardiak arrest
+kardiyak aritmiler
+kardiyak arrest
+kardiyak tamponad
+kardiyomyopati
+kardiyovasküler hastalıklar
+karpal tünel sendromu
+karsinom
+karsinoma
+karşıt gelme bozukluğu
+kartagener sendromu
+kas distrofisi
+kas erimesi
+kasabach-merritt sendromu
+kasık fıtığı
+kasık mantarı
+kaşıntı
+katalepsi
+katapleksi
+katarakt
+katatoni
+katı kişi sendromu
+kauda equina sendromu
+kavernom
+kavernöz sinus trombozu
+kawasaki hastalığı
+kaygı bozukluğu
+kaygı nevrozu
+kazıklı humma
+kearns-sayre sendromu
+kedi çığlığı sendromu
+kedi gözü sendromu
+kedi miyavlaması sendromu
+kedi tırmığı hastalığı
+kekemelik
+keloid
+kemik erimesi
+kemik metastazı
+kemik tümörü
+keratit
+keratokonus
+keratosis pilaris
+kernikterus
+ketozis
+kırım-kongo kanamalı ateşi
+kırım-kongo kanamalı ateşi virüsü
+kırım-kongo kanamalı humması
+kısa süreli tepkisel psikoz
+kısırlık
+kısıtlayıcı kardiyomiyopati
+kızamıkçık
+kızıl hastalığı
+kifoz
+kinetosis
+kinetozis
+kiraz anjiyomu
+kistik fibroz
+kistik fibrozis
+kistik higroma
+kistik renal displazi
+kişilik bozukluğu
+kişilik bozuklukları
+klamidya
+klasik otizm
+klasik pan
+klatskin tümörü
+kleefstra sendromu
+kleine-levin sendromu
+kleptomani
+klinefelter
+klinefelter sendromu
+klinelfelter sendromu
+klinik depresyon
+klippel-feil sendromu
+klippel-trenaunay sendromu
+klostrofobi
+klumpke felci
+klüver-bucy sendromu
+koah
+kobalamin eksikliği
+kolera
+kolesteatom
+kolesterolozis
+kolit
+kollagenose
+kolobom
+kolon kanseri
+kolorektal kanser
+kompartman sendromu
+kompleks bölgesel ağrı sendromu
+kondilom
+kondiloma acuminata
+kondiloma akuminata
+kondrom
+konjenital adrenal hiperplazi
+konjenital böbrek anomalileri
+konjenital diyafram fıtığı
+konjenital kalp defektleri
+konjenital kızamıkçık sendromu
+konjenital kistik akciğer hastalığı
+konjenital santral hipoventilasyon sendromu
+konjenital spondiloepifizeal displazi
+konjonktivit
+konstipasyon
+kontajiyöz hastalık
+konversiyon histerisi
+koprofaji
+korioamnionit
+kornea distrofisi
+korneal inflamasyon
+koronavirüs hastalığı
+koroner arter hastalığı
+koroner tromboz
+korpus kallozum agenezisi
+korsakov sendromu
+kostokondrit
+körlük
+krabbe hastalığı
+kraniofaringioma
+kraniyosinostoz
+kraurosis vulva
+kriptorşidizm
+kromozom anomalileri
+kromozom anomalisi
+kromozom bozuklukları
+kromozomal anomali
+kromozomal anomaliler
+kromozomal bozukluklar
+kronik ağrı
+kronik anksiyete
+kronik atrofik rinit
+kronik böbrek hastalığı
+kronik bronşit
+kronik durum
+kronik granülomatöz hastalık
+kronik hastalık
+kronik kabızlık
+kronik kaşeksi hastalığı
+kronik lenfositik lösemi
+kronik obstrüktif akciğer hastalığı
+kronik obstrüktif astım
+kronik pankreatit
+kronik travmatik ensefalopati
+kronik venöz yetmezlik
+kronik yorgunluk sendromu
+krup
+kserostomi
+kubital tünel sendromu
+kuduruk
+kudüs sendromu
+kulak çınlaması
+kulak enfeksiyonu
+kurdeşen
+kus gribi
+kuş gribi
+kuşpalazı
+kuvad sendromu
+kuyruk sokumu ağrısı
+küme baş ağrısı
+kürtaj
+laktasyonel amenore
+laktoz intoleransı
+laküner felç
+lambert-eaton sendromu
+landau-kleffner sendromu
+landri sendromu
+landry sendromu
+langerhans hücreli histiyositoz
+larenjit
+laringomalazi
+laringospazm
+larinks kanseri
+laron sendromu
+lassa ateşi
+lassa kanamalı ateşi
+leber'in herediter optik nöropatisi
+leigh hastalığı
+leiyomiyom
+lejeune sendromu
+lejyonella
+lejyoner hastalığı
+lemierre sendromu
+lenf bezi kanseri
+lenf ödemi
+lenfadenom
+lenfadenopati
+lenfanjiyoleyomiyomatozis
+lenfoma
+lenfositopeni
+lentigo
+lepra
+leptospiroz
+lewy cisimcikli demans
+lichen plan
+liken skleroz
+lipodistrofi
+lipom
+lipoma
+lipödem
+lissensefali
+listeriosis
+locked-in sendromu
+loeys-dietz sendromu
+lohusalık depresyon
+lordoz
+lökonişya
+lökopeni
+lökopenia
+lökositopeni
+lökositoz
+lösemi
+lupus hastalığı
+lupus pernio
+lupus vulgaris
+lyme hastalığı
+madde bağımlılığı
+madde zehirlenmesi
+maddeye bağlı psikoz
+magnezyum eksikliği
+major depresif bozukluk
+majör depresif bozukluk
+majör depresyon
+makat çatlağı
+makat fistülü ve apsesi
+makat kanseri
+makropsi
+makrosefali
+makrositoz
+makrosomi
+makula dejenerasyonu
+maküler dejenerasyon
+maküler ödem
+malabsorbsiyon
+malign hipertermi
+malign melanom
+malin granuloma
+malnütrisyon
+manik depresif bozukluk
+manik depresif delilik
+manik depresif psikoz
+manik depresyon
+mantar hastalığı
+marchiafava-bignami hastalığı
+marfan sendromu
+marshall sendromu
+mastitis
+mastoidit
+mastopeksi
+mastositoz
+mayer-rokitansky-kuster-hauser sendromu
+maymun çiçeği
+medüller sünger böbrek
+megaloblastik anemi
+meigs sendromu
+mekonyum aspirasyonu
+melankoli
+melanotik nevus
+melas sendromu
+melasma
+melioidoz
+membranöz glomerülonefrit
+meme kanseri
+menactra
+menenjiom
+menenjit
+menier sendromu
+meniere
+meniere hastalığı
+meningoensefalit
+meningokok hastalığı
+meningosel
+menomune
+menopoz
+menoraji
+mental bozukluk
+mental hastalık
+mental retardasyon
+mental retarde
+mental şok
+meralgia paraesthetica
+mers
+mesane enfeksiyonu
+mesane inkontinansı
+mesane kanseri
+meslek hastalığı
+meslek hastalıkları
+metabolik alkaloz
+metabolik asidoz
+metabolik sendrom
+metakromatik lökodistrofi
+metanol zehirlenmesi
+metastaz
+methemoglobinemi
+mevsimsel duygulanım bozukluğu
+mezenterik iskemi
+mezotelyoma
+mide iltihabı
+mide kanseri
+mide ülseri
+migren
+migren bozukluğu
+migren bozuklukları
+migren varyantı
+mikoplazma
+mikroftalmi sendromu
+mikrognati
+mikropenis
+mikropsi
+mikrosefali
+mikrositik anemi
+mikroskobik pan
+mitokondriyal hastalıklar
+miyalji
+miyaz
+miyelit
+miyokardit
+miyokardiyal iltihaplanma
+miyokardiyal inflamasyon
+miyokimi
+miyoklonus
+miyom
+miyop
+miyopi
+miyopluk
+miyotoni
+miyotonik distrofi
+miyozis
+mizofoni
+moğol lekesi
+mol hidatiform
+mondor hastalığı
+mongolizm
+moniliasis
+moniliyaz
+moniliyazis
+monoklonal gammopati
+monomani
+morquio sendromu
+morton nöroması
+motor nöron
+motor nöron hastalığı
+möbius sendromu
+mukor
+multifokal motor nöropati
+multipl endokrin neoplazi
+multipl miyelom
+multipl skleroz
+multiple miyelom
+mumps
+munchausen by proxy sendromu
+mültipl miyelom
+münchausen sendromu
+myastenia gravis
+mycosis
+myelodisplazi
+myelodysplasia
+myelomeningosel
+myeloproliferatif hastalık
+nabızsız elektriksel aktivite
+naboth kisti
+nadir hastalık
+naegleriasis
+narkolepsi
+narsisistik kişilik bozukluğu
+nazal septum deviasyonu
+nazofarenks karsinomu
+nefrit
+nefritik sendrom
+nefrotik sendrom
+nefrotoksisite
+nelson sendromu
+nevazil
+nevralji
+nevrasteni
+nevus flammeus
+nezle
+nicorette
+nikotin bağımlılığı
+nikotin zehirlenmesi
+nikris
+nipah virüsü enfeksiyonu
+noma
+noonan sendromu
+normal basınçlı hidrosefali
+nosofobi
+nöral tüp defekti
+nörilemmoma
+nöritis
+nöroblastom
+nöroblastoma
+nörodejenerasyon
+nöroendokrin tümör
+nörofibrom
+nörofibromatoz
+nörofibromatoz 1
+nörofibromatoz 2
+nörofibromatoz tip 1
+nörofibromatoz tip 2
+nörofibromatozis tip 1
+nörofibromatozis tip 2
+nörojen mesane
+nöroma
+nöromiyelitis optika
+nöromiyotoni
+nöropati
+nöropatik osteoartropati
+nörosifiliz
+nummüler dermatit
+obesity hypoventilation syndrome
+obezite
+obsesif kompulsif bozukluğu
+obsesif kompulsif bozukluk
+obsesif kompulsif kişilik bozukluğu
+obsesif kompülsif kişilik bozukluğu
+obstrüktif uyku apnesi
+odontoma
+oftalmoparezi
+okült spina bifida
+olağanüstü hastalık
+omfalosel
+omurga fıtığı
+omurilik hastalığı
+omurilik yaralanması
+onikomikoz
+onkoserkiyaz
+onkovirüs
+opioid kullanım bozukluğu
+oportünistik enfeksiyon
+optik nörit
+orak hücreli anemi
+oral mukozit
+organik asidemi
+orta kulak iltihabı
+orthocoronavirinae
+ortoreksiya nervoza
+ortostatik hipotansiyon
+osler-weber-rendu hastalığı
+osteoartrit
+osteogenesis imperfecta
+osteomalazi
+osteomiyelit
+osteonekroz
+osteopetroz
+osteoporoz
+osteosarkom
+osteskleroz
+otit
+otitis media
+otizm
+otoimmün ensefalit
+otoimmün hastalık
+otoimmün hepatit
+over kanseri
+öğrenme güçlüğü
+ölü doğum
+örümcek telangiektazi
+ötürük
+özgül fobi
+özofajiyal web
+paçavra hastalığı
+paget hastalığı
+palilali
+pallister-hall sendromu
+pallister-killian sendromu
+palmar eritem
+pamukçuk
+panik anksiyete sendromu
+panik atak
+panik bozukluk
+pankost tümörü
+pankreatit
+pannikülit
+pansitopeni
+papiller tiroid karsinomu
+papilödem
+parafazi
+parafreni
+parametrit
+paraneoplastik sendrom
+paranoid kişilik bozukluğu
+paranoid şizofreni
+paranoya
+parapleji
+parasomni
+paratifo
+paratifo a
+paratifo ateşi
+paratifo b
+paratifo c
+paraziter hastalıklar
+parazitik hastalıklar
+parezi
+parinaud sendromu
+paris sendromu
+parkinson hastalığı
+parkinsonizm
+paroksismal nokturnal dispne
+paroksismal nokturnal hemoglobinüri
+parotit
+parry romberg sendromu
+pasif agresif kişilik bozukluğu
+pastörelloz
+patau sendromu
+patent ductus arteriosus
+patlayan kafa sendromu
+pavor nocturns
+paylaşılmış psikotik bozukluk
+pectus carinatum
+pectus excavatum
+pellegra
+pelteklik
+pelvik inflamatuar hastalık
+pelvik organ sarkması
+pemfigus
+pemfigus hastalığı
+pena-shokeir sendromu ıı
+penis eğriliği
+penis kanseri
+penis karsinomu
+penis sertleşmesi bozukluğu
+pentazomi x
+peptik ülser
+perikardit
+periodontitis
+peritonit
+pernisyöz anemi
+petit mal status epilepticus
+peutz-jeghers sendromu
+pfeiffer sendromu
+phlegmasia coerulea dolens
+pick hastalığı
+pierre-robin sequence
+pika
+pilonidal kist
+piromani
+piyelonefrit
+pkos
+plagiosefali
+plantar fasiit
+plantar siğil
+plevral ampiyem
+plevral efüzyon
+plöral efüzyon
+plörezi
+plummer hastalığı
+pnömokonyoz
+pnömonik veba
+pnömoperitoneum
+pnömosistis pnömonisi
+pnömotoraks
+polidaktili
+poliendokrin metabolik over sendromu
+polikistik böbrek hastalığı
+polikistik over
+polikistik over sendromu
+polimiyozit
+polinevrit
+polinöropati
+polio
+poliomyelitis
+poliosis
+polip
+poliploidi
+poliploitlik
+polisitemi
+polisitemia vera
+porfiria
+post-polio sendromu
+postaksiyel polidaktili
+postpartum depresyon
+posttravmatik stres bozukluğu
+postüral ortostatik taşikardi sendromu
+prader willi sendromu
+preauriküler sinüs
+prediyabet
+preeklampsi
+prekanseröz lezyon
+premature climax
+premature ejaculation
+prematür climaks
+prematür ejakülasyon
+prematüre doğum
+prematüre ejakülasyon
+prematüre over yetmezliği
+prematüre ventriküler kasılma
+presbiyopi
+priapizm
+primer dismenore
+primer sklerozan kolanjit
+prion hastalıkları
+problemli kumar oynama
+progeria
+prognatizm
+progresif multifokal lökoensefalopati
+progressif sistemik skleroz
+prolaktinoma
+prolaps
+prosopagnosia
+prostat kanseri
+proteinüri
+proteus sendromu
+psikasteni
+psikiyatrik bozukluk
+psikiyatrik hastalık
+psikojenik amnezi
+psikolojik şok
+psikotik depresyon
+psittakoz
+psoriasis
+psöriatik artrit
+pssd
+ptosis
+pulmoner alveolar proteinozis
+pulmoner aspirasyon
+pulmoner fibroz
+pulmoner hipertansiyon
+pulmoner ödem
+pulmoner sekestrasyon
+pulmoner yüksek tansiyon
+pulpitis
+pupilla dilatasyonu
+purpura
+q humması
+qt uzaması
+rabdomiyoliz
+rabdomyosarkom
+radiküler ağrı
+radikülopati
+rahim ağzı kanseri
+rahim kanseri
+rahim sarkması
+ramsay hunt sendromu
+rapadılıno sendromu
+rapunzel sendromu
+raşitizm
+raynaud fenomeni
+reaktif artrit
+reaktif bağlanma bozukluğu
+reflu
+reflü
+reflü özofajit
+reflü tedavisi
+regresif otizm
+rektum kanseri
+renal kolik
+renk körlüğü
+renk körü
+reseptif afazi
+respiratuar yetmezlik
+retinitis pigmentosa
+retinoblastom
+retrofaringeal apse
+retrognatizm
+retrograd amnezi
+rett sendromu
+reye sendromu
+rift vadisi ateşi
+riketsioz
+ringelrötung
+rinit
+rinofima
+ritter sendromu
+roberts sendromu
+romatizma
+romatoid artrit
+rotaviral gastroenterit
+rotavirüs
+rothmund-thompson sendromu
+rozasea
+ruam
+rubella
+rubinstein-taybi sendromu
+ruhsal bozukluk
+ruminasyon bozukluğu
+sabah bulantısı
+saç kaybı
+sadist kişilik bozukluğu
+saethre-chotzen sendromu
+safra kanalı kanseri
+safra kesesi iltihabı
+safra kesesi kanseri
+safra taşı
+sağ kalma suçluluğu
+sağırlık
+sakroileit
+salmonella enteriti
+salmonellosis
+salmonelloz
+salmonellozis
+salpenjit
+saman nezlesi
+sanrısal bozukluk
+sanrısal parazitoz
+saplantı hastalığı
+sara hastalığı
+sarcopenia
+sarı humma
+sarı nokta hastalığı
+sarı tırnak sendromu
+sarıhumma
+sarkoidoz
+sarkom
+savaş bunalımı
+savaş nevrozu
+schmorl nodülü
+scrapie
+seboreik dermatit
+seboreik keratoz
+seçici mutizm
+seçici yeme bozukluğu
+sedef hastalığı
+sekonder dismenore
+selülit
+semen analizinde sperm yokluğu
+sendrom
+sepsis
+septik artrit
+septisemik veba
+serabral palsi
+serebral dejenerasyon
+serebral felç
+serebral hipoksi
+serebral ödem
+serebral palsi
+serebral venöz sinus trombozu
+serebrotendinöz ksantomatozis
+serotonin sendromu
+sertleşme sorunu
+servikal ektropiyon
+servikal kanser
+servikal polip
+servikal spondiloz
+serviks kanseri
+ses teli nodülü
+seyahat hastalığı
+seyrek hastalık
+sezary sendromu
+sığır çiçeği
+sığırların süngerimsi beyin hastalığı
+sınırda kişilik bozukluğu
+sıtma
+sibirya histerisi
+sifilis
+sifiliz
+sigara kullanımı ve hamilelik
+siğil
+siklotimik bozukluk
+silikozis
+silver-russell sendromu
+simpson-golabi-behmel sendromu
+sinir sıkışması
+sinüzit
+sirenomelia
+siringomiyeli
+siroz
+sistemik lupus eritematozus
+sistinozis
+sistiserkoz
+sistit
+situs inversus
+siyah kıllı dil
+siyatik hastalığı
+siyeladenit
+sjögren sendromu
+sjögren-larsson sendromu
+skafosefali
+skalyoz
+skar
+sklerit
+skleroderma
+skolyoz
+skorbüt
+skuamöz hücreli karsinom
+smith-lemli-opitz sendromu
+smith-magenis sendromu
+solunum sistemi hastalığı
+solunum yetmezliği
+solunum yolları enfeksiyonu
+solunum yolu hastalığı
+somatik sanrı
+somatizasyon bozukluğu
+sosyal anksiyete bozukluğu
+sosyal fobi
+sosyopat
+sotos sendromu
+spina bifida
+spina bifida aperta
+spina bifida cystica
+spina bifida occulta
+spina bifida okülta
+spinal disk hernisi
+spinal müsküler atrofi
+spinal stenoz
+spondiloartropati
+spondilolistezis
+spontan abortus
+status epileptikus
+staz dermatiti
+stein-leventhal sendromu
+stenoz
+stereotipik hareket bozukluğu
+stevens-johnson sendromu
+stickler sendromu
+stomatit
+strabismus
+streptokok farenjiti
+strongyloidiasis
+struma
+stupor
+stupor durumu
+sturge-weber sendromu
+su çiceği
+su siğilleri
+su zehirlenmesi
+subakut sklerozan panensefalit
+subaraknoid kanama
+subdural kanama
+suçiçeği
+superior vena kava sendromu
+supraventriküler taşikardi
+suskunluk
+sünnet derisi darlığı
+süpernümerer polidaktili
+süt humması
+sweet sendromu
+şalazyon
+şankroid
+şarbon
+şarbon hastalığı
+şark çıbanı
+şaşılık
+şigelloz
+şilotoraks
+şistozomiazis
+şistozomiyaz
+şizoaffektif bozukluk
+şizofren
+şizofreni
+şizofreniform bozukluk
+şizoid
+şizoid bozukluk
+şizoid kişilik bozukluğu
+şizotipal
+şizotipal bozukluk
+şizotipal kişilik bozukluğu
+şok akciğeri
+tabes dorsalis
+taijin kyofusho
+takayasu arteriti
+takıntı hastalığı
+takotsubo kardiyomiyopatisi
+talasemi
+tansiyon yüksekliği
+tardiv diskinezi
+taş adam sendromu
+taşıt tutması
+taun
+tavşan dudak
+tavşan dudaklılık
+tavuk karası
+tavuk vebası
+tavukkarası
+tay-sachs hastalığı
+telenjiektazi
+temporal arterit
+temporal lob epilepsisi
+temporomandibular eklem fonksiyon bozukluğu
+tendinopati
+tenisçi dirseği
+tenosinovit
+tenyazis
+teratom
+terleme hastalığı salgını
+terson sendromu
+testis kanseri
+testis torsiyonu
+tetanos
+tetanoz
+tetanus
+tetenoz
+tetik parmak
+tetonoz
+tetra-amelia sendromu
+thomsen hastalığı
+tırnak batması
+tırnak mantarı
+tırnak yeme
+tiamin eksikliği
+tifo
+tifo ateşi
+tifüs
+tik bozukluğu
+tinea barbae
+tinea versicolor
+tip 1 diabetes mellitus
+tip 2 diabetes mellitus
+tip ı bipolar bozukluk
+tip ıı bipolar bozukluk
+tiroid kanseri
+tiroid yetmezliği
+toksienfeksiyon
+toksik diffüz guatr
+toksik şok sendromu
+toksikomani
+toksokariyaz
+toksoplazmoz
+tolosa-hunt sendromu
+tonsilit
+topallık
+topuk dikeni
+torasik çıkış sendromu
+tortikolis
+tourette sendromu
+trahom
+trahom hastalığı
+trakeit
+transvers miyelit
+travma sonrası stres bozukluğu
+treacher collins sendromu
+trigeminal nevralji
+trigonosefali
+trikofaji
+trikomoniyaz
+trikotillomani
+trikuriyaz
+triple x sendromu
+trişinoz
+trizomi
+trizomi 18
+trizomi 21
+trizomi 9
+trombositopeni
+trombositoz
+trombotik mikroanjiyopati
+trombotik trombositopenik purpura
+tromboz
+tropikal hastalıklar
+tropikal ülser
+truman show sendromu
+tuberoskleroz
+tuberoz skleroz
+tularemi
+tularemi hastalığı
+turner sendromu
+tüberküloz
+tüberoskleroz
+tüberoz skleroz
+tüberoz skleroz kompleksi
+tümör
+tütünün sağlığa etkileri
+uçak tutması
+uçuş tutması
+ulnar sinir sıkışması
+uniparental dizomi
+urbach-wiethe hastalığı
+uterus kanseri
+uyku apnesi
+uyku bozukluğu
+uyku bozuklukları
+uykusuzluk
+uyumsuz hayal kurma
+uyurgezerlik
+ülser
+ülseratif kolit
+üreme sağlığı bozukluğu
+üremi
+üriner inkontinans
+ürolitiyazis
+ürtiker
+üst solunum yolu enfeksiyonu
+üveit
+vajinal akıntı
+vajinal kanama
+vajinismus
+vajinit
+varikosel
+varisella
+varyant creutzfeldt-jakob hastalığı
+vasküler demans
+vaskülit
+veba
+venöz trombüs
+ventriküler fibrilasyon
+ventriküler septal defekt
+ventriküler taşikardi
+verem
+vertigo
+vestibüler schwannoma
+viral ensefalit
+viral hastalık
+viral hepatitler
+viral pnömoni
+vitiligo
+vitre
+von hippel-lindau hastalığı
+von recklinghausen
+von willebrant hastalığı
+vücut bütünlüğü kimlik bozukluğu
+waardenburg sendromu
+wagr sendromu
+waterhouse-friderichsen sendromu
+wegener granülomatozu
+werner sendromu
+wernicke ensefalopatisi
+wernicke korsakoff sendromu
+whipple hastalığı
+williams-beuren sendromu
+wilms tümörü
+wilson hastalığı
+wolf-hirschhorn sendromu
+wolfram sendromu
+wuhan virüsü
+xeroderma pigmentosum
+xxyy sendromu
+xyy sendromu
+yabancı el sendromu
+yağ bezesi
+yağ embolisi
+yapışık ikizler
+yapışık parmaklılık
+yarık damak-dil bağı sendromu
+yarık dudak
+yatak yarası
+yaygın anksiyete bozukluğu
+yaygın gelişimsel bozukluklar
+yelpik
+yeme bozukluğu
+yeme bozuklukları
+yemek borusu kanseri
+yeni doğan sarılığı
+yeni koronavirüs
+yenidoğan sarılığı
+yenidoğan solunum sıkıntısı sendromu
+yetişkin refsum hastalığı
+ygb-bta
+yoksunluk sendromu
+yumurtalık kanseri
+yumurtalık kisti
+yutak iltihab
+yutak iltihabı
+yüksek tansiyon
+yürüyen ceset sendromu
+yüz felci
+yüz körlüğü
+yüzücü kaşıntısı
+zatülcenp
+zatürre
+zellweger sendromu
+zieve sendromu
+zollinger ellison sendromu
+zona
+zona hastalığı
+zona hastaligi
+zoofobi
+zükâm
+@health im
+# Wikidata (CC0): items with an ATC code (P267) outside V, D, A01 and A11-A13,
+# at least 8 sitelinks, Turkish label, no single dictionary word (see special_terms.SOURCES.md)
+5-hidroksitriptofan
+abakavir
+abemaciclib
+abirateron
+ace inhibitörü
+adalimumab
+adenozin
+adrafinil
+adrenokortikotropik hormon
+afatinib
+agomelatin
+akamprosat
+akarboz
+aklidinyum
+albendazol
+aldosteron
+alemtuzumab
+alkaftadin
+allilestrenol
+allopurinol
+almotriptan
+aloksiprin
+alprazolam
+alteplaz
+altretamin
+alverin
+alvimopan
+amantadin
+amilorid
+aminofilin
+aminoglikozit
+amiodaron
+amisülpirid
+amitriptilin
+amlodipin
+amodiakin
+amoksapin
+amoksisilin
+ampisilin
+anabolik steroid
+anastrozol
+anidulafungin
+anksiyolitik
+anti-diyare ilaçları
+anti-obezite ilacı
+anti-tetanoz immunoglobulin
+antiasitler
+antidepresan
+antidiyabetik
+antihelmintik
+antihistaminik
+antikoagülan
+antikolinerjik
+antikonvülzan
+antipsikotik
+antivenom immunoglobulin
+apiksaban
+apomorfin
+apremilast
+aprepitant
+aripiprazol
+armodafinil
+arsenik trioksit
+artemeter
+artesunat
+aseklofenak
+asemetasin
+asenapin
+asepromazin
+asetazolamid
+asetilkolin
+asetilsistein
+atazanavir
+atenolol
+atezolizumab
+atomoksetin
+atorvastatin
+atovakuon
+atrakuryum
+atropin
+azatioprin
+azelastin
+azitromisin
+b12 vitamini
+bağışıklık uyarıcılar
+bakır rahim içi araç
+baklofen
+bcg aşısı
+bedakuilin
+beklometazon
+beksaroten
+belatacept
+belimumab
+bendamustin
+bendazak
+benorilat
+benzatin benzilpenisilin
+benzbromaron
+benzilpenisilin
+benznidazol
+benzodiazepin
+benzokain
+benzonatat
+besifloksasin
+beta blokör
+betahistin
+betaksolol
+betametazon
+betanekol
+bevasizumab
+bifemelan
+bikalutamid
+bilastin
+biperiden
+bisakodil
+bisoprolol
+bleomisin
+boğmaca aşısı
+bortezomib
+bosentan
+botulinum toksini
+brekspiprazol
+brinzolamid
+brivarasetam
+bromazepam
+bromokriptin
+budezonid
+bumetanid
+bupivakain
+buprenorfin
+bupropion
+buserelin
+buspiron
+busulfan
+butamirat
+butokonazol
+cabozantinib
+capreomycin
+carisoprodol
+cenegermin
+cevimeline
+chondroitin sulfate
+covıd-19 aşısı
+cyproheptadine alhavi 4
+çiçek aşısı
+çocuk felci aşısı
+dakarbazin
+daklatasvir
+daktinomisin
+dalteparin
+danazol
+dapagliflozin
+dapoksetin
+daptomisin
+darbepoetin alfa
+darunavir
+dasabuvir
+dasatinib
+daunorubisin
+dbt aşısı
+deksketoprofen
+deksmedetomidin
+deksmetilfenidat
+dekstran 70
+dekstroamfetamin
+dekstrometorfan
+dekstropropoksifen
+delamanid
+demegeston
+demir takviyesi
+denosumab
+desfluran
+desipramin
+desmopressin
+desogestrel
+desvenlafaksin
+diaserein
+diazepam
+diazoksit
+dibenzepin
+dietilkarbamazin
+difenoksin
+diflunisal
+difteri antitoksini
+difteri aşısı
+digoksin
+dihidrotestosteron
+diklonin
+diltiazem
+dinutuksimab
+dipiridamol
+dipivefrin
+diritromisin
+disikloverin
+disülfiram
+dobutamin
+doksapram
+doksilamin
+doksorubisin
+dokusat sodyum
+dolasetron
+dolutegravir
+domperidon
+donepezil
+dopamin agonisti
+dopeksamin
+dosetaksel
+dronedaron
+droperidol
+drospirenon
+dulaglutit
+duloksetinin
+dutasterid
+ebastin
+edoksaban
+efavirenz
+efedrin
+eksemestan
+eksenatid
+eletriptan
+empagliflozin
+enalapril
+enfluran
+enoksaparin
+entekavir
+enzalutamid
+eprosartan
+erdostein
+ergometrin
+ergotamin
+erlotinib
+ertapenem
+esomeprazol
+essitalopram
+estazolam
+eszopiklon
+etambutol
+etanersept
+etenzamid
+etinilestradiol
+etionamid
+etizolam
+etodolak
+etomidat
+etonogestrel implant
+etoperidon
+etoposid
+etosüksimid
+etravirin
+everolimus
+ezetimib
+famotidin
+favipiravir
+feksinidazol
+feksofenadin
+fenasetin
+fenazon
+fenazopiridin
+fenelzin
+fenetillin
+fenfluramin
+fenilbutazon
+fenilefrin
+fenilpropanolamin
+fenitoin
+fenobarbital
+fenoksimetilpenisilin
+fenolftalein
+fenoprofen
+fenoterol
+fenprokumon
+fentanil
+fentermin
+fentolamin
+ferrous gluconate
+filgrastim
+fingolimod
+fitonadion
+flekainid
+flibanserin
+fludarabin fosfat
+fludrokortizon
+flufenazin
+flukloksasilin
+flumekin
+flunarizine
+flunisolid
+flunitrazepam
+fluoksetin
+fluorourasil
+flupirtin
+flurazepam
+flurbiprofen
+flutamid
+fluvastatin
+fluvoksamin
+fosfomisin
+fulvestrant
+furazolidon
+furosemid
+gabapentin
+galantamin
+gansiklovir
+gefitinib
+gemfibrozil
+gemsitabin
+gepiron
+glibenklamid
+gliklazid
+gliseril trinitrat
+gliserofosforilkolin
+glükokortikoid
+golimumab
+gonadotropin
+goserelin
+gramisidin
+granisetron
+guaifenesin
+guanfasin
+haloperidol
+halotan
+heksobarbital
+heksoprenalin
+heparin
+hepatit a aşısı
+hepatit b aşısı
+hib aşısı
+hidralazin
+hidroklorotiyazid
+hidrokodon
+hidroksiklorokin
+hidroksiüre
+hidroksizin
+hidroksokobalamin
+hidromorfon
+hiyosin butilbromür
+homatropin
+hpv aşısı
+ibrutinib
+ibuprofen
+ifosfamid
+iloperidon
+imatinib
+imipramin
+immünsüpresif ilaç
+indapamid
+indinavir
+indometazin
+infliksimab
+influenza aşısı
+insan koryonik gonadotropin
+insülin - degludec
+insülin - detemir
+insülin - glarjin
+insülin - uzun etkili
+interferon
+interlökin
+invert şeker
+ipratropium bromür
+iprindol
+iproniazid
+irbesartan
+irinotekan
+itoprid
+itrakonazol
+ivabradin
+izofluran
+izoniazid
+izoprenalin
+izosorbid dinitrat
+japon ensefaliti aşısı
+kabakulak aşısı
+kabazitaksel
+kabergolin
+kalsiyum kanal blokörü
+kalsiyum karbonat
+kamazepam
+kamed quaro
+kamostat
+kan plazması
+kan pulcuğu
+kanagliflozin
+kanamisin
+kandesartan
+kannabidiol
+kapesitabin
+kaplacizumab
+kapsaisin
+kaptopril
+karbakol
+karbamazepin
+karbetosin
+karbimazol
+karboplatin
+kariprazin
+karteolol
+karvedilol
+kas gevşetici
+kaspofungin
+kene kaynaklı ensefalit aşısı
+ketanserin
+keten tohumu
+ketiapin
+ketoprofen
+ketorolak
+ketotifen
+kıvrım diüretiği
+kızamık aşısı
+kızamıkçık aşısı
+kinidin
+kkk aşısı
+klaritromisin
+klenbuterol
+klobazam
+klofazimin
+kloksasilin
+klometiazol
+klomifen
+klomipramin
+klonazepam
+klonidin
+klopidogrel
+kloralhidrat
+klorambusil
+klorazepat
+klordiazepoksid
+klorfenamin
+klorobütanol
+klorokin
+klorotiazid
+klorpromazin
+klorpropamid
+klorprotiksen
+klorsiklizin
+klortalidon
+klozapin
+kodein
+koenzim q10
+kolera aşısı
+kolistin
+kolşisin
+kortikosteroid ilaçlar
+kortizon
+krizotinib
+kromolin
+ksilometazolin
+kuazepam
+kuduz aşısı
+kuduz immünoglobulini
+kuinbolon
+l-dopa
+labetalol
+lactobacillus
+lakozamid
+laktuloz
+lamivudin
+lamotrijin
+lansoprazol
+latanoprost
+leflunomid
+lenalidomid
+lerkanidipin
+letermovir
+levamizol
+levetirasetam
+levofloksasin
+levomepromazin
+levonorgestrel
+levosetirizin
+levotiroksin
+lidokain
+lifitegrast
+linezolid
+linkomisin
+liraglutid
+lisdeksamfetamin
+lisinopril
+lofeksidin
+lokal anestezik
+lomustin
+loperamid
+loprolid
+loratadin
+lorazepam
+lormetazepam
+losartan
+lovastatin
+lumasiran
+lurasidon
+lusutrombopag
+magnezyum sitrat
+magnezyum sülfat
+maprotilin
+maravirok
+mebendazol
+medazepam
+meflokin
+meglumin antimonat
+meklizin
+meksiletin
+melarsoprol
+melfelan
+melitrasen
+meloksikam
+melperon
+memantin
+meningokok menenjit aşısı
+mepakrin
+meprobamat
+merkaptopurin
+meropenem
+mersalil
+mesalazin
+mesna
+metadon
+metakualon
+metamizol
+metazolamid
+metenamin
+metformin
+metildopa
+metilergometrin
+metilfenidat
+metiltestosteron
+metimazol
+metipranolol
+metisilin
+metokarbamol
+metoklopramid
+metoksifluran
+metotreksat
+mianserin
+midazolam
+midodrin
+mifepristone
+mikafungin
+milnasipran
+miltefosin
+mineralokortikoidler
+minoksidil
+mirabegron
+mirtazapin
+misoprostol
+mitoksantron
+moderna covıd-19 aşısı
+modifil
+moeksipril
+moklobemid
+moksestrol
+moksifloksasin
+molindon
+monoamin oksidaz inhibitörleri
+montelukast
+morfin
+mukoaktif madde
+nabilon
+nadolol
+nafsilin
+nalbufin
+naldemedin
+nalmefen
+nalokson
+naltrekson
+naproksen
+naratriptan
+natalizumab
+nebivolol
+nedokromil
+nefazodon
+nefopam
+neostigmin
+neratinib
+netilmisin
+nevirapin
+niaprazin
+nifedipin
+nifuroksazid
+nifurtimoks
+nikardipin
+niklozamit
+nikotin replasman tedavisi
+nilotinib
+nilutamid
+nimesulid
+nimodipin
+nisergolin
+nisoldipin
+nistatin
+nitazoksanid
+nitrazepam
+nitrofurantoin
+nitrofurazon
+nivolumab
+nizatidin
+nomifensin
+noradrenalin
+nordazepam
+noretisteron
+norfenefrin
+norfloksasin
+normal immünoglobülin tedavisi
+nortriptilin
+nusinersen
+ofloksasin
+oksaliplatin
+oksamnikin
+oksaprozin
+oksazepam
+oksibutinin
+oksikodon
+oksolamin
+oktreotid
+olanzapin
+olaparib
+olmesartan
+omalizumab
+omega-3 yağ asitleri
+omeprazol
+ondansetron
+opipramol
+orlistat
+ormeloksifen
+oseltamivir
+osimertinib
+oxandrolone
+östradiol
+östriol
+paklitaksel
+palbociclib
+paliperidon
+palonosetron
+pankreatin
+pantoprazol
+papaverin
+paraldehit
+parasempatomimetik ilaçlar
+parasetamol
+paroksetin
+paromomisin
+pegaspargaz
+peginterferon alfa-2a
+peginterferon alfa-2b
+pembrolizumab
+pemetreksed
+pemolin
+penisilamin
+pentazosin
+pentobarbital
+pentoksifilin
+pentoksiverin
+perfenazin
+petidin
+pilokarpin
+pindolol
+pipamperon
+piperacillin
+piperazin
+pipotiazin
+pirantel
+pirasetam
+pirazinamid
+pirazolon
+piribedil
+piridostigmin
+pirimetamin
+piroksikam
+pitavastatin
+plekanatid
+plitidepsin
+pnömokok aşısı
+polidokanol
+polietilen glikol
+polimiksin b
+polygala senega
+potasyum asetat
+potasyum iyodür
+potasyum perklorat
+pramipeksol
+pramiracetam
+pramlintide
+pramokain
+prasugrel
+pravastatin
+prazikuantel
+prazosin
+prednisolon
+prednizon
+pregabalin
+primakin
+primidon
+progesteron
+proguanil
+prokain
+prokain benzilpenisilin
+prokarbazin
+prokinetik ajan
+proklorperazin
+propafenon
+propiltiourasil
+propofol
+propranolol
+prostaglandin
+prostaglandin e1
+prostaglandin e2
+protionamid
+psödoefedrin
+rabeprazol
+rahim içi araç
+raloksifen
+raltegravir
+ramelteon
+ramipril
+ranitidin
+ranolazin
+rasajilin
+reboksetin
+remdesivir
+ribavirin
+rifabutin
+rifaksimin
+rifamisin
+rifampisin
+rifapentin
+rilpivirin
+riluzol
+rimantadin
+rimonabant
+riociguat
+risperidon
+ritodrin
+ritonavir
+rituksimab
+rivaroksaban
+rofekoksib
+roksitromisin
+romiplostim
+ropinirol
+rosiglitazon
+rosuvastatin
+rotavirüs aşısı
+rufinamid
+ruksolitinib
+rupatadin
+saccharomyces boulardii
+salbutamol
+salmeterol
+salsalat
+saresiklin
+sarıhumma aşısı
+seçici serotonin gerialım inhibitörü
+sefaleksin
+sefalosporin
+sefazolin
+sefdinir
+sefiksim
+sefotaksim
+seftazidim
+seftriakson
+sefuroksim
+selekoksib
+semaglutid
+sempatomimetik ilaç
+senna glikozidleri
+sertolizumab pegol
+sertralin
+setirizin
+sevofluran
+sglt2 inhibitörü
+sibutramin
+siklesonid
+siklizin
+siklobenzaprin
+siklofosfamid
+siklopentolat
+sikloserin
+siklosporin
+sildenafil
+silodosin
+simeprevir
+simetidin
+simvastatin
+sinnarizin
+sinoksasin
+siprofloksasin
+sirolimus
+sisaprid
+sisplatin
+sitagliptin
+sitalopram
+sitarabin
+siyanokobalamin
+skopolamin
+sodyum asetat
+sodyum bikarbonat
+sodyum lauryl sülfat
+sodyum salisilat
+sodyum stiboglukonat
+sofosbuvir
+sotalol
+spektinomisin
+spironolakton
+stavudin
+stiripentol
+streptokinaz
+streptomisin
+streptozotosin
+suksamentonyum
+sulfadiazin
+sulfasalazin
+sulindak
+sultamisilin
+sultoprid
+sumatriptan
+suvoreksant
+sülfonilüreler
+sülpirid
+tadalafil
+talidomid
+tamoksifen
+tamsulosin
+tapentadol
+tedizolid
+telitromisin
+telmisartan
+temazepam
+tenofovir
+tenoksikam
+teofilin
+terazosin
+terbutalin
+tergurid
+teriflunomid
+terizidon
+tertatolol
+tesamorelin
+testosteron
+tetanos aşısı
+tetrabenazin
+tetrakain
+tianeptin
+tiaprid
+ticagrelor
+tietilperazin
+tifo aşısı
+tildrakizumab
+tilidin
+timolol
+tinidazol
+tioguanin
+tiotiksen
+tiotropium bromür
+tirofiban
+tiroid hormonu
+tirzepatid
+tiyokolşikosid
+tiyoridazin
+tizanidin
+tobramisin
+tocilizumab
+tofizopam
+tolkapon
+toloksaton
+tolvaptan
+topiramat
+topotekan
+torasemid
+toremifen
+tozinameran
+tramadol
+tranilsipromin
+trastuzumab
+trazodon
+treprostinil
+triazolam
+tribenosid
+trifluoperazin
+triheksifenidil
+triklabendazol
+triklofos
+trikloroetilen
+trimetazidin
+trimetobenzamid
+trimetoprim
+trimipramin
+triptorelin
+tropikamid
+tropisetron
+udenafil
+ulipristal
+umeklidinyum
+valasiklovir
+valbenazin
+valgansiklovir
+valsartan
+vankomisin
+vardenafil
+vareniklin
+varfarin
+veba aşısı
+vedolizumab
+venlafaksin
+verapamil
+vilazodon
+vildagliptin
+vinblastin
+vinflunin
+vinkristin
+vinorelbin
+vorikonazol
+vortioxetine
+yapay gözyaşları
+zanamivir
+zidovudin
+zikonotid
+zimelidin
+ziprasidon
+zolpidem
+zonisamid
+zopiklon
+zuklopentiksol

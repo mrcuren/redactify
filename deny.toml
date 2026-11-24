@@ -1,0 +1,83 @@
+# cargo-deny configuration - license compliance gate.
+#
+# Scope: the full Cargo.lock tree across ALL crate features (default + api +
+# ml-onnx), including dev-dependencies, so the checked graph matches the lock
+# file 1:1. Security advisories are covered separately by the rustsec
+# audit-check CI job; bans/sources stay at defaults.
+#
+# Policy: everything NOT listed in [licenses].allow is denied. Only permissive
+# licenses actually observed in the locked tree are allowlisted, each with the
+# crate(s) that use it. Copyleft (GPL/AGPL/LGPL/CC-SA) and non-free
+# (CC-BY-NC/ND) entries would fail this check and must be escalated, not
+# silently allowlisted.
+
+[graph]
+all-features = true
+# Check dependency licenses for the platform targets the tree actually spans,
+# not just the host, so the local (Windows) run and the CI (Linux) run gate
+# the exact same set - linux-raw-sys / core-foundation / wasm bits included.
+targets = [
+    { triple = "x86_64-unknown-linux-gnu" },
+    { triple = "x86_64-pc-windows-msvc" },
+    { triple = "aarch64-apple-darwin" },
+    { triple = "wasm32-unknown-unknown" },
+    { triple = "wasm32-wasip2" },
+]
+
+[licenses]
+version = 2
+# cargo-deny resolves each crate's SPDX expression from its Cargo.toml
+# `license` field; this threshold only gates license-FILE text scanning
+# (used when the field is missing). 0.93 is the cargo-deny-recommended
+# middle ground (default 0.8, max 1.0).
+confidence-threshold = 0.93
+include-dev = true
+
+allow = [
+    # The two licenses this crate itself is dual-licensed under, and the
+    # standard permissive pair most of the Rust ecosystem uses.
+    "MIT",
+    "Apache-2.0",
+    # ort-sys / wasi / rustix-style tri-licensing with the LLVM exception
+    # (exception only relaxes; still permissive).
+    "Apache-2.0 WITH LLVM-exception",
+    # unicode-ident data tables - permissive Unicode terms.
+    "Unicode-3.0",
+    # walkdir / same-file (BurntSushi) are Unlicense OR MIT - public domain.
+    "Unlicense",
+    # webpki-root-certs: root certificate data under the permissive CDLA.
+    "CDLA-Permissive-2.0",
+    # hmac-sha256 (ort-sys build chain) - ISC, OSI-approved permissive.
+    "ISC",
+]
+
+[licenses.private]
+ignore = true
+
+# NOTE: keep this list evidence-based. When `cargo deny check licenses` flags
+# a new license id, verify it is OSI-approved permissive (spdx.org), note the
+# crate that pulled it in, then add it here. Never add GPL*/AGPL*/LGPL*,
+# CC-BY-NC*, CC-BY-SA* or unlisted custom licenses without a legal review.
+
+# Vulnerability policy: a known RUSTSEC advisory in the locked tree fails
+# the build. Warnings stay visible via the weekly audit job even when
+# unmaintained-only.
+[advisories]
+version = 2
+yanked = "deny"
+# RUSTSEC-2024-0436 is informational ("unmaintained", no patched version),
+# not a vulnerability. `paste` is a proc-macro (it runs at build time and
+# puts no code in the binary) that enters the tree only through
+# `tokenizers` under the optional ml-onnx feature; every stable tokenizers
+# release (0.21.4, 0.22.2, 0.23.2) depends on it, only the 1.0.0 release
+# candidates dropped it (crates.io, checked 2026-11-01). Revisit when
+# tokenizers 1.0 is stable (a tokenizer major version needs the token
+# streams re-verified against the Python export).
+ignore = [
+    { id = "RUSTSEC-2024-0436", reason = "unmaintained build-time proc-macro behind the optional ml-onnx feature; no stable tokenizers release without it" },
+]
+
+# Dependency sources: crates.io + the local path only.
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"

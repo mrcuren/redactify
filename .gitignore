@@ -1,13 +1,21 @@
-# Rust derleme çıktıları
+# Rust build output
 /target
 
-# Yerel çalışma alanları (repoya ait değil)
-/.zcode/
-/learn/
+# ML model files (hundreds of MB; never enter the repo - export
+# instructions are in ML_SETUP.md)
+/ml_models/
 
-# İç araştırma notları — kasıtlı olarak repoya dahil değildir
-/research/
-
-# Editör/OS
+# Editor/OS
 .DS_Store
 Thumbs.db
+
+# make run artifacts
+/.serve.pid
+/.serve.log
+
+# cargo-fuzz build output, generated corpora and crash artifacts
+# (the fuzz targets themselves ARE tracked; only their outputs are not)
+/fuzz/target/
+/fuzz/corpus/
+/fuzz/artifacts/
+/fuzz/coverage/

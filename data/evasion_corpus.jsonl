@@ -1,0 +1,15 @@
+{"id": "tckn-zero-width", "family": "normalization_pii", "text": "TCKN 1​2​345678950", "expected": "mask"}
+{"id": "tckn-soft-hyphen", "family": "normalization_pii", "text": "TCKN 1­2345678950", "expected": "mask"}
+{"id": "iban-fullwidth-prefix", "family": "normalization_pii", "text": "iban ＴＲ33 0006 1005 1978 6457 8413 26", "expected": "mask"}
+{"id": "tckn-fullwidth-digits", "family": "normalization_pii", "text": "tckn １２３４５６７８９５０", "expected": "mask"}
+{"id": "sql-base64-1", "family": "encoded_rules", "text": "log: eDsgRFJPUCBUQUJMRSB1c2VyczsgLS0=", "expected": "block"}
+{"id": "traversal-base64-1", "family": "encoded_rules", "text": "cfg: cmVhZCAuLi8uLi9ldGMvcGFzc3dkIGZvciBkZXRhaWxz", "expected": "block"}
+{"id": "sql-fullwidth", "family": "encoded_rules", "text": "ＳＥＬＥＣＴ * FROM users; --", "expected": "block"}
+{"id": "pii-base64-depth1", "family": "layer_depth", "text": "a VENLTiAxMjM0NTY3ODk1MA== b", "expected": "mask"}
+{"id": "pii-base64-depth2", "family": "layer_depth", "text": "a Y3R4IFZFTkxUaUF4TWpNME5UWTNPRGsxTUE9PQ== b", "expected": "mask"}
+{"id": "pii-base64-depth3", "family": "layer_depth", "text": "a Y3R4IFkzUjRJRlpGVGt4VWFVRjRUV3BOTUU1VVdUTlBSR3N4VFVFOVBRPT0= b", "expected": "mask"}
+{"id": "pii-base64-depth4", "family": "layer_depth", "text": "a Y3R4IFkzUjRJRmt6VWpSSlJscEdWR3Q0VldGVlJqUlVWM0JPVFVVMVZWZFVUbEJTUjNONFZGVkZPVkJSUFQwPQ== b", "expected": "boundary"}
+{"id": "tckn-dot-scatter", "family": "separator_scatter", "text": "num 1.2.3.4.5.6.7.8.9.5.0", "expected": "boundary"}
+{"id": "tckn-underscore-scatter", "family": "separator_scatter", "text": "num 1_2_3_4_5_6_7_8_9_5_0", "expected": "boundary"}
+{"id": "cue-cyrillic-lookalike", "family": "cue_homoglyph", "text": "ТCKN 12345678950", "expected": "mask"}
+{"id": "cue-dotted-capital", "family": "cue_homoglyph", "text": "İBAN TR33 0006 1005 1978 6457 8413 26", "expected": "mask"}

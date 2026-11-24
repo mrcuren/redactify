@@ -1,39 +1,172 @@
-[package]
-name = "redactify"
-version = "0.3.0"
+# Root-package workspace: `redactify` is the primary package at the root and
+# every companion crate lives under crates/. A plain `cargo` command at the
+# root acts on `redactify` only; build a companion with `cargo build -p <name>`.
+[workspace]
+members = [".", "crates/*"]
+# standalone crates with their own workspace: the cargo-fuzz targets and the
+# in-browser demo of the GitHub Pages site (web/, wasm-bindgen)
+exclude = ["fuzz", "web"]
+
+[workspace.package]
+version = "0.1.0"
 edition = "2021"
 rust-version = "1.80"
-description = "Checksum-validated PII detection & redaction for structured identifiers - ships with Turkish identifiers (TCKN, IBAN, VKN, plates), extensible to other locales"
-license = "Apache-2.0"
-keywords = ["pii", "redaction", "privacy", "masking", "gdpr"]
-categories = ["text-processing"]
+repository = "https://github.com/mrcuren/redactify"
 
-# v2 planı: kapsam büyürse workspace'e bölün - crates/{redactify-core, redactify-cli, redactify-wasm}
-# v1'de tek package yeterli (Cargo Packages & Crates kuralı: lib + bin aynı package'ta olabilir).
+[workspace.dependencies]
+redactify = { path = ".", version = "0.1.0" }
+serde_json = "1"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+unexpected_cfgs = "deny"
+# Rust API Guidelines C-DEBUG: every public type is Debug (types holding
+# user text or keys implement it by hand, content-free)
+missing_debug_implementations = "warn"
+# `pub` only where the item is reachable from the crate root
+unreachable_pub = "warn"
+
+[workspace.lints.clippy]
+# public functions document their `# Errors` and `# Panics`
+missing_errors_doc = "warn"
+missing_panics_doc = "warn"
+
+[package]
+name = "redactify"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+description = "Deterministic data-protection and policy layer for LLM and agent pipelines: checksum-validated PII detection (103 entity types across 26 locale packs + 89-country IBAN + VIN + crypto addresses), secrets/API-key detection, policy decisions, streaming guard, reversible pseudonymization vault, agent tool-call guard, audit chain, rule-based injection checks, optional ONNX classifiers and NER, REST API"
+# Unicode-3.0 covers the generated confusables and decimal digit tables in
+# src/guard/confusables.rs and src/guard/digits.rs (Unicode data, see NOTICE)
+license = "(MIT OR Apache-2.0) AND Unicode-3.0"
+keywords = ["pii", "redaction", "guardrails", "llm-safety", "privacy"]
+# slugs from the crates.io category list
+categories = ["text-processing", "internationalization"]
+repository.workspace = true
+# crates.io renders this page: a Rust-first summary (install, examples,
+# features) whose code blocks run as doctests (`CratesIoReadmeDoctests` in
+# src/lib.rs); README.md stays the GitHub landing page (REST, Docker, MCP)
+readme = "crates-io.md"
+
+# crates.io package: ship the library surface + test data only. Dev/ops
+# tooling (docker, make, CI), docs, the logo and the ML evaluation sets
+# stay in the repository, not the published crate.
+exclude = [
+    ".github/",
+    "Dockerfile",
+    "docker-compose.yml",
+    ".dockerignore",
+    "Makefile",
+    "assets/",
+    "docs/",
+    "ML_SETUP.md",
+    # ML/NER evaluation sets: repository-only data (tests that read them skip
+    # when absent; the glob covers the variants and their .SOURCES.md notes)
+    "data/ml_testset_*",
+    "data/ner_testset_*",
+    # model pins reference gitignored local artifacts; meaningless in the
+    # published crate
+    "ml_models.pins.sha256",
+    # local model exports (several GB): .gitignore keeps them out only when
+    # packaging from a git checkout, so exclude them explicitly as well
+    "/ml_models/",
+    # cargo-fuzz package (own workspace root, nightly toolchain)
+    "fuzz",
+]
 
 [features]
 default = []
-# ONNX Runtime for ML inference (optional). download-binaries fetches the
-# ONNX Runtime shared library automatically at build time.
-ml-onnx = ["ort"]
+# REST API server (optional). tiny_http is a small, std-only HTTP/1.x server;
+# the zero-dependency core is unaffected when this feature is off.
+api = ["tiny_http"]
+# ONNX Runtime for ML inference (optional; download-binaries fetches the
+# runtime library at build time). Needs Rust 1.88+ (`ort` rust-version), above
+# the 1.80 MSRV of the other features. toml + serde parse the per-model
+# `model.toml` of the ONNX encoder adapter.
+ml-onnx = ["ort", "tokenizers", "dep:toml", "dep:serde"]
+# Serde derives for the public data/output types (Entity, Decision, Policy,
+# guard signals, ...). Opt-in: the zero-dependency core is unaffected when
+# off. `Vault` is deliberately NOT serializable (see pii/vault.rs).
+serde = ["dep:serde"]
+# TOML policy configuration (`Policy::from_toml`, REDACTIFY_POLICY env).
+# Opt-in: pulls `toml` + `serde`.
+config = ["dep:toml", "serde"]
 
 [dependencies]
 # Small, auditable dependencies - no models, no network (zero-model core principle).
 # fancy-regex: lookaround-capable backtracking engine; boundary semantics
 # locked by the differential suite.
-fancy-regex = "0.13"
+fancy-regex = "0.20"
+# aho-corasick: literal prefilter for the secrets layer (a marker miss
+# proves no rule can fire). Already in the tree via fancy-regex ->
+# regex-automata, so the direct dependency adds zero new code to the build.
+aho-corasick = "1.1"
 # unicode-normalization: guardrails L0 - NFKC (homoglyph/fullwidth evasion defense).
 unicode-normalization = "0.1"
 # base64: guardrails L0 - suspect payload decoding + re-scan.
 base64 = "0.22"
 # serde_json: guardrails L4 - JSON schema validation of LLM output.
-serde_json = "1"
+serde_json.workspace = true
+# serde: optional Serialize/Deserialize on the public data types (behind the
+# `serde` feature).
+serde = { version = "1", features = ["derive"], optional = true }
+# thiserror: std::error::Error/Display derives for the typed error enums.
+thiserror = "2"
+# regex-syntax (already in the tree through fancy-regex): `CustomRule::new_linear`
+# uses it to refuse look-around, back-references and atomic groups, and to
+# measure the shortest match, before compiling an untrusted pattern.
+regex-syntax = { version = "0.8", default-features = false, features = ["std", "unicode"] }
 # ONNX Runtime bindings (optional, behind ml-onnx feature).
-ort = { version = "2.0.0-rc.9", features = ["download-binaries"], optional = true }
+ort = { version = "2.0.0-rc.13", features = ["download-binaries"], optional = true }
+# HuggingFace tokenizer runtime (optional, behind ml-onnx feature). Same
+# implementation the Python export uses, so token streams match exactly.
+# fancy-regex backend: pure Rust (onig would pull a C library); fancy-regex
+# is already a core dependency, so no new build-time requirements.
+tokenizers = { version = "0.21", default-features = false, features = [
+    "fancy-regex",
+], optional = true }
+# Minimal HTTP/1.x server (optional, behind api feature). std-only, no async
+# runtime - matches the small-auditable-dependency principle.
+tiny_http = { version = "0.12", optional = true }
+# TOML policy config parsing (optional, behind config feature). The committed
+# Cargo.lock, not a version pin, carries the 1.80 MSRV for this subtree: a fresh
+# resolution picks releases that need Rust 1.85 (on 1.80 resolve with
+# CARGO_RESOLVER_INCOMPATIBLE_RUST_VERSIONS=fallback, cargo >= 1.84).
+toml = { version = "0.9.8", optional = true }
 
 [dev-dependencies]
 criterion = "0.5"
+# Property-based tests (tests/property.rs), pinned to ~1.4 without `fork`: the
+# MSRV job compiles dev-dependencies on 1.80, newer series need a newer Rust, and
+# `fork` pulls getrandom 0.4 (edition 2024, Cargo >= 1.85).
+proptest = { version = "~1.4", default-features = false, features = ["std", "bit-set"] }
+
+[lints]
+workspace = true
 
 [[bench]]
 name = "pii"
 harness = false
+
+[[example]]
+name = "api_bench"
+required-features = ["api"]
+
+[package.metadata.docs.rs]
+# build the API reference with every feature so docs.rs also documents the
+# `api` and `ml-onnx` surfaces
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+# one target: the API is target-independent, and each extra docs.rs target
+# rebuilds the full all-features graph (docs.rs builds 5 targets when this is
+# unset, https://docs.rs/about/metadata)
+targets = ["x86_64-unknown-linux-gnu"]
+
+[profile.release]
+# hardening + size: thin LTO, strip symbols (also shrinks the Docker image).
+# NOTE: `panic = "abort"` is deliberately NOT set - the REST API worker pool
+# relies on catch_unwind panic isolation.
+codegen-units = 1
+lto = "thin"
+strip = "symbols"

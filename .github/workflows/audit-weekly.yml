@@ -1,0 +1,19 @@
+# Weekly dependency-audit sweep: rustsec/audit-check against the locked
+# tree even when nothing is being merged, so a newly published advisory
+# surfaces within a week instead of waiting for the next push (the ci.yml
+# audit job only fires on pushes and pull requests).
+name: audit-weekly
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: rustsec/audit-check@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

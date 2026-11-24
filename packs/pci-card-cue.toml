@@ -1,0 +1,25 @@
+# PCI card-number hygiene pack: mask cue-labelled card numbers that fail
+# the Luhn check (opt-in).
+#
+# By design the built-in CREDIT_CARD rule claims only checksum-valid
+# numbers, so a card number with one mistyped digit stays visible. This
+# pack adds a second rule: 13 to 19 digits (spaces or dashes allowed
+# between digits) next to a card cue are masked as CREDIT_CARD even when
+# the Luhn check fails. A bare long number without a cue is untouched.
+#
+# MAPPING INPUT, NOT A CERTIFICATION: it does not make a deployment PCI
+# DSS compliant by itself. Cost: a cue-labelled 13-19 digit value that is
+# not a card (a test fixture, an order id after the word "card") is masked
+# as well.
+#
+# Use it next to any other pack, or alone:
+#   redactify --policy packs/pci-card-cue.toml ...   (config feature)
+#   REDACTIFY_POLICY=packs/pci-card-cue.toml redactify --serve
+
+schema_version = "0.3"
+
+[[custom_rules]]
+label = "CREDIT_CARD"
+pattern = '(?<!\d)\d(?:[ -]?\d){12,18}(?!\d)'
+cues = ["card number", "card no", "card #", "credit card", "debit card", "cc number", "cc num", "pan", "kart numarasi", "kart no", "kredi karti", "banka karti", "numero de carte", "kartennummer"]
+score = 0.9

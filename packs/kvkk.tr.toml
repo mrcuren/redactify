@@ -1,0 +1,28 @@
+# KVKK (Turkish personal data protection law) mapping pack.
+#
+# MAPPING INPUT, NOT A CERTIFICATION: this preset tightens the guard for
+# Turkish personal-data workflows (TCKN/VKN/IBAN/phone; Turkish names by the
+# lexicon scanner; Turkish postal addresses by rule; dates only as a date of
+# birth next to a birth cue; art. 6 special categories when tied to a
+# person). It does not make any deployment KVKK-compliant by itself.
+#
+# Recommended detection settings for this pack:
+#   locales: ["tr", "en"]        (the default set; IBAN is always on)
+#
+# Band semantics: the category blocks from the band's lower edge
+# (none = never block / monitor only, low = 0.35, medium = 0.60, high = 0.85).
+
+schema_version = "0.1"
+
+block_at = 0.60
+log_at = 0.40
+
+[categories]
+# a degraded NER enricher must not look like clean text under a privacy
+# regime: block (threshold low) the moment enrichment fails
+NER_DEGRADED = "low"
+# PII concealed inside an encoded payload is a concealment attempt:
+# block from the LOW band
+ENCODED_PII = "low"
+# leaked credentials: keep the default blocking line (0.60)
+SECRETS = "medium"

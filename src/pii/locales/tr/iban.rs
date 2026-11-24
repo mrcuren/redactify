@@ -2,7 +2,9 @@
 
 /// Returns `true` if `iban` is a valid Turkish IBAN.
 ///
-/// Rules: spaces are stripped and letters uppercased; the value must be `TR`
+/// Rules: spaces and hyphens are stripped and letters uppercased (the
+/// printed form groups by spaces; a hyphen-grouped copy,
+/// `TR33-0006-1005-...`, carries the same value); the value must be `TR`
 /// followed by exactly 24 digits; then the standard mod-97 check runs
 /// (rearrangement: BBAN + country + check digits, characters interpreted
 /// base-36, expecting `mod 97 == 1`).
@@ -11,6 +13,7 @@
 /// ```
 /// use redactify::valid_iban_tr;
 /// assert!(valid_iban_tr("TR33 0006 1005 1978 6457 8413 26"));
+/// assert!(valid_iban_tr("TR33-0006-1005-1978-6457-8413-26"));
 /// assert!(!valid_iban_tr("TR00 0000 0000 0000 0000 0000 00"));
 /// assert!(!valid_iban_tr("TR33 0006 1005 1978 6457 8413 27")); // one digit changed
 /// ```
@@ -18,32 +21,15 @@
 pub fn valid_iban_tr(iban: &str) -> bool {
     let s: String = iban
         .chars()
-        .filter(|c| !c.is_whitespace())
+        .filter(|&c| !c.is_whitespace() && c != '-')
         .flat_map(char::to_uppercase)
         .collect();
     let b = s.as_bytes();
     if b.len() != 26 || b[0] != b'T' || b[1] != b'R' || !b[2..].iter().all(u8::is_ascii_digit) {
         return false;
     }
-    // Rearrange: BBAN(24) + "TR" + check(2); streamed mod-97 left to right (no bigint needed).
-    let order: Vec<u8> = b[4..]
-        .iter()
-        .copied()
-        .chain(b[..4].iter().copied())
-        .collect();
-    let mut rem: u32 = 0;
-    for &c in &order {
-        let v: u32 = match c {
-            b'0'..=b'9' => u32::from(c - b'0'),
-            b'A'..=b'Z' => u32::from(c - b'A') + 10,
-            _ => return false,
-        };
-        // Feed each decimal digit of the base-36 value (10..35 are two digits wide).
-        for digit in v.to_string().bytes().map(|d| u32::from(d - b'0')) {
-            rem = (rem * 10 + digit) % 97;
-        }
-    }
-    rem == 1
+    // mod-97 over the rearranged value, shared with the international rule
+    crate::pii::locales::iban::mod97_is_valid(&s)
 }
 
 use crate::pii::entity::EntityType;
@@ -54,7 +40,7 @@ use crate::pii::locales::{rule, ContextPolicy, Rule};
 pub(crate) fn rule() -> Rule {
     rule!(
         EntityType::Iban,
-        r"(?i)TR\d{2}(?:\s?\d{4}){5}\s?\d{2}",
+        r"(?i)TR\d{2}(?:[\s-]?\d{4}){5}[\s-]?\d{2}",
         Some(valid_iban_tr),
         ContextPolicy::None,
         1.0

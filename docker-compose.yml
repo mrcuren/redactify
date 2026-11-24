@@ -1,0 +1,48 @@
+# redactify REST API - local-first guard/PII service.
+#
+#   docker compose up -d --build
+#   curl -s localhost:8080/health
+#   docker compose down
+#
+# Serves the deterministic core (L0 rules + L1 PII + policy). The ML layer is
+# intentionally not shipped: model exports live in ml_models/ (gitignored,
+# ~2.9GB). To experiment with ML in a container, rebuild with
+# FEATURES=api,ml-onnx and mount ./ml_models read-only - see ML_SETUP.md.
+
+services:
+  redactify:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FEATURES: api
+    image: redactify:local
+    container_name: redactify
+    # 0.0.0.0 INSIDE the container; only the host port is published
+    command: ["--serve", "0.0.0.0:8080"]
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    # defense-in-depth for a security tool: read-only fs, no new privileges,
+    # bounded resources
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

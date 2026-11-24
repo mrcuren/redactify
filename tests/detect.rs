@@ -72,7 +72,9 @@ NOT: Sipariş numaranız 12000345671 - bu bir TCKN DEĞİL (checksum tutmuyor), 
     // no real values must remain
     assert!(!out.contains("12345678950"));
     assert!(!out.contains("4111 1111 1111 1111"));
-    assert_eq!(detect(text).len(), 7);
+    // plus the first name in "ben Ayşe" (the lexicon scanner `tr::person`)
+    assert!(out.contains("ben [NAME]."), "{out}");
+    assert_eq!(detect(text).len(), 8);
 }
 
 #[test]
@@ -84,5 +86,43 @@ fn entities_are_sorted_left_to_right_and_non_overlapping() {
     assert_eq!(ents, sorted);
     for w in ents.windows(2) {
         assert!(w[0].end <= w[1].start, "overlap: {:?}", ents);
+    }
+}
+
+#[test]
+fn allowlisted_winner_does_not_hide_the_overlapping_finding() {
+    use redactify::{CustomRule, Detector};
+    // "AB-1234" (TCKN tier) outranks the overlapping "1234-CD" (VKN tier);
+    // allowlisting the winner lets the loser compete on its own instead
+    // of silently suppressing it
+    let winner = CustomRule::new(EntityType::Tckn, r"AB-\d{4}").unwrap();
+    let loser = CustomRule::new(EntityType::Vkn, r"\d{4}-CD").unwrap();
+    let rules = [&winner, &loser];
+    let d = Detector::new().with_custom_rules(&rules);
+    assert_eq!(d.redact("ref AB-1234-CD x"), "ref [TCKN]-CD x");
+    assert_eq!(
+        d.with_ignored(&["AB-1234"]).redact("ref AB-1234-CD x"),
+        "ref AB-[VKN] x"
+    );
+}
+
+#[test]
+fn normalization_aware_detection_is_sorted_and_non_overlapping() {
+    use redactify::Detector;
+    // fullwidth TCKN first, then a raw e-mail, then a zero-width-scattered
+    // phone: the normalized-view findings are merged in text order
+    let text = "\u{FF11}\u{FF12}\u{FF13}\u{FF14}\u{FF15}\u{FF16}\u{FF17}\u{FF18}\u{FF19}\u{FF15}\u{FF10}, \
+                a@b.com, 0532\u{200B} 123 45 67";
+    let ents = Detector::new().with_normalization(true).detect(text);
+    let kinds: Vec<EntityType> = ents.iter().map(|e| e.kind).collect();
+    assert_eq!(
+        kinds,
+        vec![EntityType::Tckn, EntityType::Email, EntityType::Phone]
+    );
+    for w in ents.windows(2) {
+        assert!(w[0].end <= w[1].start, "{ents:?}");
+    }
+    for e in &ents {
+        assert_eq!(&text[e.start..e.end], e.text);
     }
 }

@@ -1,0 +1,38 @@
+[package]
+name = "redactify-web"
+version = "0.0.0"
+edition = "2021"
+publish = false
+description = "In-browser demo of redactify for its GitHub Pages site (not published)"
+license = "MIT OR Apache-2.0"
+
+# standalone: not a member of the redactify workspace (like fuzz/), so the
+# published crate and its CI never build wasm-bindgen
+[workspace]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "gen-gallery"
+path = "src/bin/gen_gallery.rs"
+
+[dependencies]
+redactify = { path = ".." }
+serde_json = "1"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+# pinned: the wasm-bindgen CLI in .github/workflows/pages.yml must match it
+wasm-bindgen = "=0.2.130"
+
+[profile.release]
+# measured 2026-11-20 (default features, wasm-bindgen 0.2.130): opt-level
+# "z" gave the smallest gzip transfer (543 KB vs 586 KB for "s" and 672 KB
+# for 3); `wasm-opt -Oz` shrank the raw file but grew the gzip by 4%, so the
+# pipeline does not run it
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+# wasm-bindgen reads the target_features section, which `strip = true` drops
+strip = false

@@ -1,0 +1,215 @@
+# CI mirrors the gates documented in README "Validation":
+# fmt --check, clippy -D warnings across feature configurations, full test
+# suites (default + api), plus a separate ml-onnx job (real ONNX Runtime via
+# ort download-binaries; model-dependent tests skip gracefully without the
+# local ml_models/ exports).
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: rustfmt
+        run: cargo --locked fmt --all -- --check
+      - name: clippy (default)
+        run: cargo --locked clippy --all-targets -- -D warnings
+      - name: clippy (api)
+        run: cargo --locked clippy --all-targets --features api -- -D warnings
+      - name: clippy (api + ml-onnx)
+        run: cargo --locked clippy --all-targets --features "api ml-onnx" -- -D warnings
+      - name: clippy (api + serde)
+        run: cargo --locked clippy --all-targets --features "api serde" -- -D warnings
+      - name: clippy (api + config)
+        run: cargo --locked clippy --all-targets --features "api config" -- -D warnings
+      # English-only prose gate (functional Turkish - tr locale data,
+      # fixtures, cue words - is allowlisted in the test)
+      - name: check-english
+        run: cargo --locked test --test english_only
+
+  # Docs gate: rustdoc warnings (broken intra-doc links, bare URLs, ...)
+  # fail the build. Mirrors `make doc`.
+  doc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: rustdoc (-D warnings, all optional features)
+        run: cargo --locked doc --no-deps --features "api ml-onnx serde config"
+        env:
+          RUSTDOCFLAGS: "-D warnings"
+
+  # docs.rs gate: docs.rs builds with a nightly rustdoc, `--cfg docsrs` and
+  # all features, and without network (`DOCS_RS=1` makes ort-sys skip its
+  # binary download, as on docs.rs). Nightly can resolve intra-doc links
+  # differently from stable, so the stable `doc` job alone does not prove the
+  # docs.rs build.
+  docsrs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2
+      - name: rustdoc as docs.rs runs it (nightly, --cfg docsrs, -D warnings)
+        run: cargo --locked doc --no-deps --all-features
+        env:
+          DOCS_RS: "1"
+          RUSTDOCFLAGS: "--cfg docsrs -D warnings"
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: test (default features)
+        run: cargo --locked test --quiet
+      - name: "test (api): REST + CLI-JSON suites"
+        run: cargo --locked test --quiet --features api
+      - name: "test (serde): round-trip suite"
+        run: cargo --locked test --quiet --features serde
+      - name: "test (config): TOML policy + packs suite"
+        run: cargo --locked test --quiet --features config
+      - name: "test (api + config): packs wired through the REST handler"
+        # the two api-facing policy_config tests are cfg'd on BOTH features
+        # (neither single-feature step compiles them)
+        run: cargo --locked test --quiet --features "api config" --test policy_config
+
+  # WASM target gate: the zero-dependency deterministic core (default +
+  # serde features) must stay compilable for wasm32-unknown-unknown - the
+  # edge/browser story. The api/ml-onnx features are native-only by design.
+  wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: "check (wasm32): deterministic core"
+        run: cargo check --locked --quiet --target wasm32-unknown-unknown
+      - name: "check (wasm32 + serde)"
+        run: cargo --locked check --quiet --target wasm32-unknown-unknown --features serde
+
+  # MCP server crate (workspace member; explicit -p: default-members keeps
+  # root commands meaning "just redactify")
+  mcp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: "clippy (redactify-mcp)"
+        run: cargo --locked clippy -p redactify-mcp --all-targets -- -D warnings
+      - name: "test (redactify-mcp): dispatcher + real-binary stdio e2e"
+        run: cargo --locked test -p redactify-mcp
+
+  test-ml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: "test (ml-onnx): unit + integration suites"
+        # full --lib --tests pass under the feature: the fixture suite runs
+        # real onnxruntime inference, the guard::ml / guard::onnx unit suites
+        # (mocks + math) run here, and the real-model suites skip gracefully
+        # without ml_models/ exports
+        run: cargo --locked test --quiet --features "ml-onnx" --lib --tests
+
+  # Fuzzing smoke gate: bounded coverage-guided runs of the cargo-fuzz
+  # targets (detect, normalize) on every push. Long corpus-growing runs
+  # stay local (`make fuzz`); CI proves the harness builds and survives
+  # the smoke budget with zero crashes.
+  fuzz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            .
+            fuzz
+      - name: install cargo-fuzz
+        run: cargo --locked install cargo-fuzz --locked
+      - name: "fuzz (detect): 60s smoke"
+        run: cargo --locked fuzz run detect -- -max_total_time=60
+      - name: "fuzz (normalize): 60s smoke"
+        run: cargo --locked fuzz run normalize -- -max_total_time=60
+
+  # Coverage report (default + api features; the ml-onnx graph would pull
+  # the ONNX Runtime download for little gain). Uploaded as an lcov artifact.
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-llvm-cov
+      - name: "coverage (default + api)"
+        run: cargo --locked llvm-cov --features api --lcov --output-path lcov.info
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-lcov
+          path: lcov.info
+
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.80.0
+      - uses: Swatinem/rust-cache@v2
+      - name: "check (declared MSRV 1.80: core, api, config, all targets)"
+        run: |
+          cargo +1.80.0 check --locked --quiet --all-targets
+          cargo +1.80.0 check --locked --quiet --all-targets --features "api,config"
+
+  # Canary for downstream resolution: the committed lock + --locked masks
+  # caret-range breakage for consumers resolving fresh. Refresh the toml
+  # subtree WITHOUT --locked and compile the config feature on stable (see
+  # the comment on `toml` in Cargo.toml for the MSRV note).
+  fresh-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: "update toml subtree (deliberately unlocked)"
+        run: cargo update -p toml
+      - name: "check config feature (fresh resolution)"
+        run: cargo check --features config --all-targets
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: rustsec/audit-check@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  # License compliance gate: every crate in the locked tree (all features,
+  # dev deps included) must carry an explicitly allowlisted permissive
+  # license (see deny.toml). Copyleft or non-free licenses fail the build.
+  licenses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          arguments: check licenses

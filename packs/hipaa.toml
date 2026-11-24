@@ -1,0 +1,28 @@
+# HIPAA (US health data) mapping pack.
+#
+# MAPPING INPUT, NOT A CERTIFICATION: a stricter preset for US healthcare
+# workflows. It does not make any deployment HIPAA-compliant by itself, and
+# it is not HIPAA Safe Harbor de-identification: several of the 18 Safe
+# Harbor identifiers are not covered.
+#
+# Detected with locales ["en"] (the `en` pack plus the always-on rules):
+# SSN, MRN (with a label), NPI, Medicare MBI,
+# ZIP (with a label), phone, e-mail, IP, URL. Person names: only next to a
+# label cue (`name:`), or in free prose with the optional NER layer.
+# Street addresses: only with the optional NER layer. Dates (birth,
+# admission, discharge, death) are not detected at all.
+#
+# Recommended detection settings for this pack:
+#   locales: ["en"]
+
+schema_version = "0.1"
+
+block_at = 0.50
+log_at = 0.30
+
+[categories]
+# health data: prefer blocking over logging - tighten the global lines
+NER_DEGRADED = "low"
+ENCODED_PII = "low"
+SECRETS = "low"
+AUTHORITY_IMPERSONATION = "medium"

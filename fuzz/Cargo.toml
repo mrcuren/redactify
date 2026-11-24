@@ -1,0 +1,84 @@
+[package]
+name = "redactify-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+# libfuzzer-sys 0.4: the fuzz_target! API is identical across the 0.4+ line;
+# pinned to the series available across registries (newer series add no
+# feature this harness needs).
+libfuzzer-sys = "0.4"
+
+# serde_json: the api and json_redact targets read and build JSON bodies.
+serde_json = "1"
+
+[dependencies.redactify]
+path = ".."
+# api: the REST handler target; config: the TOML policy target
+features = ["api", "config"]
+
+# Keep this package out of the root workspace (it is a dev tool, needs a
+# nightly toolchain for sanitizer instrumentation, and must never ship).
+# The root Cargo.toml lists "fuzz" in its workspace exclude as well.
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "detect"
+path = "fuzz_targets/detect.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "normalize"
+path = "fuzz_targets/normalize.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "guard_stream"
+path = "fuzz_targets/guard_stream.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "api"
+path = "fuzz_targets/api.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "json_redact"
+path = "fuzz_targets/json_redact.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "policy"
+path = "fuzz_targets/policy.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "crypto"
+path = "fuzz_targets/crypto.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "context"
+path = "fuzz_targets/context.rs"
+test = false
+doc = false
+bench = false

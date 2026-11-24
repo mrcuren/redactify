@@ -1,0 +1,18 @@
+[package]
+name = "redactify-mcp"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+description = "MCP (Model Context Protocol) server for redactify: PII detection/redaction, rule-based guard checks, reversible pseudonymization vault and tool-call guard as agent tools, std-only, agent/operator tier isolation"
+license = "MIT OR Apache-2.0"
+repository.workspace = true
+readme = "README.md"
+keywords = ["pii", "redaction", "guardrails", "mcp", "llm-safety"]
+categories = ["text-processing"]
+
+[dependencies]
+redactify = { workspace = true, features = ["serde", "config"] }
+serde_json.workspace = true
+
+[lints]
+workspace = true

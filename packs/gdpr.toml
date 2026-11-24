@@ -1,0 +1,41 @@
+# GDPR (EU data protection) mapping pack.
+#
+# MAPPING INPUT, NOT A CERTIFICATION: a stricter preset for EU personal-data
+# workflows. It does not make any deployment GDPR-compliant by itself.
+#
+# This pack sets the server's default locales (`locales` below).
+
+schema_version = "0.1"
+
+block_at = 0.60
+log_at = 0.40
+
+# Server-wide default locales for EU personal-data workflows. The built-in
+# tr+en default stays in the list: the GDPR scope does not depend on the
+# data subject's nationality. Regulation (EU) 2016/679, OJ L 119, 4.5.2016
+# (http://publications.europa.eu/resource/celex/32016R0679, retrieved
+# 2026-10-31):
+# - Art. 3(1): "This Regulation applies to the processing of personal data
+#   in the context of the activities of an establishment of a controller or
+#   a processor in the Union, regardless of whether the processing takes
+#   place in the Union or not."; Art. 3(2): "... personal data of data
+#   subjects who are in the Union by a controller or processor not
+#   established in the Union ..."
+# - Art. 4(1): "'personal data' means any information relating to an
+#   identified or identifiable natural person ('data subject'); ... by
+#   reference to an identifier such as a name, an identification number
+#   ..."
+# - Recital 14: "The protection afforded by this Regulation should apply to
+#   natural persons, whatever their nationality or place of residence, in
+#   relation to the processing of their personal data."
+# A Turkish national's TCKN processed by an EU establishment is therefore
+# personal data under this pack, as are US identifiers of the en pack.
+locales = ["tr", "en", "de", "fr", "es", "nl", "uk", "it", "pl", "pt"]
+
+[categories]
+NER_DEGRADED = "low"
+ENCODED_PII = "low"
+SECRETS = "medium"
+# authority impersonation (fake auditors/DPO claims) is a common EU
+# social-engineering vector: block from the MEDIUM band
+AUTHORITY_IMPERSONATION = "medium"

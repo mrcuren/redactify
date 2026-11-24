@@ -42,7 +42,7 @@ use crate::pii::entity::EntityType;
 use crate::pii::locales::{rule, ContextPolicy, Rule};
 
 /// Cue words that make a bare 10-digit candidate claimable as a VKN.
-pub(super) const CUES: &[&str] = &["vkn", "vergi", "tax"];
+pub(super) const CUES: &[&str] = &["vkn", "v.k.n", "vergi", "tax"];
 
 #[allow(clippy::redundant_pub_crate)]
 pub(crate) fn rule() -> Rule {

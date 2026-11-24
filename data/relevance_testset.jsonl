@@ -1,0 +1,12 @@
+{"text": "call me at 0505 186 48 37, TCKN 12345678950", "rule": "phone_contact", "expect_stay": ["0505 186 48 37"], "expect_masked": ["[TCKN]"], "expect_action": "Mask"}
+{"text": "the number 0505 186 48 37 leaked", "rule": "phone_contact", "expect_stay": [], "expect_masked": ["[PHONE]"], "expect_action": "Mask"}
+{"text": "lutfen ara beni 0505 186 48 37 diye not dustu", "rule": "phone_contact", "expect_stay": ["0505 186 48 37"], "expect_masked": [], "expect_action": "Allow"}
+{"text": "please reach me at 0505 186 48 37 today", "rule": "phone_contact", "expect_stay": ["0505 186 48 37"], "expect_masked": [], "expect_action": "Allow"}
+{"text": "call me at 0505 186 48 37; SELECT * FROM users; --", "rule": "phone_contact", "expect_stay": [], "expect_masked": [], "expect_action": "Block"}
+{"text": "mail john@example.com about it", "rule": "phone_contact", "expect_stay": [], "expect_masked": ["[EMAIL]"], "expect_action": "Mask"}
+{"text": "call me at 0505 186 48 37, IBAN TR33 0006 1005 1978 6457 8413 26", "rule": "phone_contact", "expect_stay": ["0505 186 48 37"], "expect_masked": ["[IBAN]"], "expect_action": "Mask"}
+{"text": "call me at xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 0505 186 48 37", "rule": "phone_contact", "expect_stay": [], "expect_masked": ["[PHONE]"], "expect_action": "Mask", "note": "cue-to-span distance (81 bytes) exceeds the 64-byte window: no downgrade"}
+{"text": "call me at 0505 186 48 37 please, and separately TCKN 12345678950 too", "rule": "phone_contact", "expect_stay": ["0505 186 48 37"], "expect_masked": ["[TCKN]"], "expect_action": "Mask"}
+{"text": "CALL ME AT 0505 186 48 37 URGENT", "rule": "phone_contact", "expect_stay": ["0505 186 48 37"], "expect_masked": [], "expect_action": "Allow", "note": "case-insensitive cue matching"}
+{"text": "contact: a@b.com", "rule": "email_contact", "expect_stay": ["a@b.com"], "expect_masked": [], "expect_action": "Allow"}
+{"text": "random address a@b.com in scraped page", "rule": "email_contact", "expect_stay": [], "expect_masked": ["[EMAIL]"], "expect_action": "Mask"}

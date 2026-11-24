@@ -1,0 +1,44 @@
+# Release verification: manual (workflow_dispatch) or on a version tag.
+# Runs the same gates as ci.yml, then verifies the exact package that
+# would be published (`cargo package --list` + `cargo publish --dry-run`).
+#
+# NOTE: cargo-semver-checks needs a previously published version on
+# crates.io as its baseline. Enable that step after the first release.
+name: release
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: rustfmt
+        run: cargo --locked fmt --all -- --check
+      - name: clippy
+        run: cargo --locked clippy --all-targets --features "api serde" -- -D warnings
+      - name: test
+        run: |
+          cargo test --locked --quiet
+          cargo test --locked --quiet --features api
+          cargo test --locked --quiet --features serde
+          cargo test --locked --quiet --features config
+          cargo test --locked -p redactify-mcp
+      - name: docs
+        run: cargo --locked doc --no-deps --features "api serde"
+        env:
+          RUSTDOCFLAGS: "-D warnings"
+      - name: package contents
+        run: cargo --locked package --list
+      - name: publish dry-run
+        run: cargo --locked publish --dry-run

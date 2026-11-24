@@ -79,7 +79,7 @@ pub fn encode_html(text: &str) -> String {
 /// dependency-heavy validator). It covers the OWASP LLM05 guidance:
 /// validate that the output is a JSON object with required keys, allowed
 /// key types and no unexpected top-level keys.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct JsonSchema {
     /// Keys that must be present at the top level.
     pub required: &'static [&'static str],
@@ -87,10 +87,27 @@ pub struct JsonSchema {
     pub allowed: &'static [&'static str],
 }
 
-/// Validates that `text` parses as a JSON object and conforms to the schema.
-///
-/// Returns `Ok(())` when the output is structurally valid, or a `Err(String)`
-/// with a human-readable explanation of the first violation found.
+/// Typed error for [`validate_json_schema`] (no stringly-typed errors);
+/// `source()` preserves the underlying JSON error.
+#[derive(Debug, thiserror::Error)]
+#[non_exhaustive]
+pub enum SchemaError {
+    /// The output is not valid JSON.
+    #[error("output is not valid JSON: {0}")]
+    InvalidJson(#[source] serde_json::Error),
+    /// The top-level value is not a JSON object.
+    #[error("output must be a JSON object at the top level")]
+    NotAnObject,
+    /// A key required by the schema is absent.
+    #[error("required key '{0}' is missing from output")]
+    MissingRequiredKey(String),
+    /// A key outside the schema's allowed list is present.
+    #[error("unexpected key '{0}' in output (not in allowed list)")]
+    UnexpectedKey(String),
+}
+
+/// Validates that `text` is a JSON object carrying every required key and no
+/// key outside the allowed list (an empty allowed list permits anything).
 ///
 /// # Examples
 /// ```
@@ -103,31 +120,30 @@ pub struct JsonSchema {
 ///
 /// assert!(validate_json_schema(r#"{"name":"Ali","email":"a@b.com"}"#, &schema).is_ok());
 /// assert!(validate_json_schema(r#"{"name":"Ali"}"#, &schema).is_err()); // missing email
-/// assert!(validate_json_schema(r#"{"name":"Ali","email":"a@b.com","x":1}"#, &schema).is_err()); // unknown key
+/// assert!(validate_json_schema(r#"{"name":"Ali","email":"a@b.com","x":1}"#, &schema).is_err());
 /// assert!(validate_json_schema("not json", &schema).is_err());
 /// ```
-pub fn validate_json_schema(text: &str, schema: &JsonSchema) -> Result<(), String> {
-    let v: serde_json::Value =
-        serde_json::from_str(text).map_err(|e| format!("output is not valid JSON: {e}"))?;
+///
+/// # Errors
+/// Returns a typed [`SchemaError`]: invalid JSON, non-object top level,
+/// a missing required key, or a key outside the allowed list.
+pub fn validate_json_schema(text: &str, schema: &JsonSchema) -> Result<(), SchemaError> {
+    let v: serde_json::Value = serde_json::from_str(text).map_err(SchemaError::InvalidJson)?;
 
-    let obj = v
-        .as_object()
-        .ok_or_else(|| "output must be a JSON object at the top level".to_owned())?;
+    let obj = v.as_object().ok_or(SchemaError::NotAnObject)?;
 
     let keys: BTreeSet<&str> = obj.keys().map(|k| k.as_str()).collect();
 
     for req in schema.required {
         if !keys.contains(req) {
-            return Err(format!("required key '{req}' is missing from output"));
+            return Err(SchemaError::MissingRequiredKey((*req).to_owned()));
         }
     }
 
     if !schema.allowed.is_empty() {
         for key in &keys {
             if !schema.allowed.contains(key) {
-                return Err(format!(
-                    "unexpected key '{key}' in output (not in allowed list)"
-                ));
+                return Err(SchemaError::UnexpectedKey((*key).to_owned()));
             }
         }
     }
@@ -182,14 +198,16 @@ mod tests {
     #[test]
     fn json_missing_required_key_fails() {
         let err = validate_json_schema(r#"{"name":"Ali"}"#, &SCHEMA).unwrap_err();
-        assert!(err.contains("id"), "unexpected message: {err}");
+        let msg = err.to_string();
+        assert!(msg.contains("id"), "unexpected message: {msg}");
     }
 
     #[test]
     fn json_unknown_key_fails() {
         let err =
             validate_json_schema(r#"{"id":1,"name":"Ali","hacked":"yes"}"#, &SCHEMA).unwrap_err();
-        assert!(err.contains("hacked"), "unexpected message: {err}");
+        let msg = err.to_string();
+        assert!(msg.contains("hacked"), "unexpected message: {msg}");
     }
 
     #[test]

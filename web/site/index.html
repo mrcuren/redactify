@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- no network beyond this site: the engine runs here, in WebAssembly -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; connect-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>redactify</title>
+<meta name="description" content="Local-first PII detection, redaction and LLM guardrails in Rust. Try it in your browser: your text never leaves the page.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-row">
+    <span class="brand">
+      <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><rect x="3" y="5" width="18" height="3" rx="1.5"/><rect x="3" y="10.5" width="12" height="3" rx="1.5"/><rect x="3" y="16" width="15" height="3" rx="1.5"/><circle cx="20" cy="12" r="2"/></svg>
+      redactify
+    </span>
+    <nav aria-label="Project links">
+      <a href="https://github.com/mrcuren/redactify">GitHub</a>
+      <a href="https://docs.rs/redactify">Docs</a>
+      <a href="https://crates.io/crates/redactify">crates.io</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <h1>PII detection, redaction and LLM guardrails, checked by checksum.</h1>
+    <p class="lead">A deterministic Rust engine: identifiers are verified by their check digits, encodings are decoded before the decision, and one call returns Allow, Log, Mask or Block with the masked text.</p>
+    <p class="privacy"><span aria-hidden="true">&#128274;</span> The demo runs the real engine in your browser (WebAssembly). The text you type is never sent anywhere.</p>
+  </section>
+
+  <section class="wrap card" aria-labelledby="demo-title">
+    <h2 id="demo-title">Try it</h2>
+    <label for="input" class="field-label">Text to check</label>
+    <textarea id="input" rows="5" spellcheck="false">Müşteri TCKN 12345678950, kart 4111 1111 1111 1111, sipariş no 12345678951</textarea>
+    <div class="controls">
+      <label>Target
+        <select id="target">
+          <option value="user_prompt">user prompt</option>
+          <option value="tool_response">tool response</option>
+          <option value="model_output">model output</option>
+        </select>
+      </label>
+      <details class="locales">
+        <summary>Locale packs <span id="locale-summary">(tr, en)</span></summary>
+        <fieldset id="locale-list"><legend class="sr-only">Locale packs</legend></fieldset>
+      </details>
+      <button id="run" type="button">Analyze</button>
+    </div>
+    <p id="status" class="status" role="status">The engine loads on first use (about 0.5 MB).</p>
+    <div id="result" class="result" aria-live="polite" hidden>
+      <div class="decision-row">
+        <span id="decision" class="badge"></span>
+        <span id="rationale" class="rationale"></span>
+      </div>
+      <h3 class="out-title">Output <span id="remask-note" class="note" hidden>(on Block the library returns the raw text; shown here is the loggable re-mask the REST API returns)</span></h3>
+      <pre id="output" class="output"></pre>
+      <h3 class="out-title">Detected entities</h3>
+      <ul id="entities" class="entities"></ul>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="gallery-title">
+    <h2 id="gallery-title">Examples</h2>
+    <p class="muted">Every output below was produced by the engine itself when this page was built.</p>
+    <div id="tabs" class="tabs" role="tablist" aria-label="Example groups"></div>
+    <div id="panels"></div>
+  </section>
+
+  <section class="wrap card" aria-labelledby="install-title">
+    <h2 id="install-title">Use it</h2>
+    <h3>Rust</h3>
+    <pre class="code">cargo add redactify</pre>
+    <pre class="code">assert_eq!(redactify::redact("TCKN 12345678950"), "TCKN [TCKN]");</pre>
+    <h3>REST server (Docker, from a checkout)</h3>
+    <pre class="code">docker compose up -d --build
+curl -s localhost:8080/v1/sanitize -H 'content-type: application/json' \
+  -d '{"text":"TCKN 12345678950"}'</pre>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p>MIT or Apache-2.0 (Unicode data tables: Unicode-3.0). An identifier redactor, not a compliance guarantee.</p>
+</footer>
+<script type="module" src="app.js"></script>
+</body>
+</html>
