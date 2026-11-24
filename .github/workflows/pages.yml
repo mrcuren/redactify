@@ -49,7 +49,7 @@ jobs:
         working-directory: web
         run: node check-gallery.cjs target/node-pkg site/gallery.json
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: web/site
 
