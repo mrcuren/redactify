@@ -48,7 +48,7 @@ jobs:
       - name: the WebAssembly module reproduces the gallery
         working-directory: web
         run: node check-gallery.cjs target/node-pkg site/gallery.json
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v4
         with:
           path: web/site
