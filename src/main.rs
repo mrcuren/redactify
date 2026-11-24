@@ -187,9 +187,9 @@ fn main() {
             let Some(v) = args.get(i + 1) else {
                 usage_error("--max-body requires a byte count");
             };
-            skip_next = true;
             #[cfg(feature = "api")]
             {
+                skip_next = true;
                 match v.parse::<usize>() {
                     Ok(n) => max_body = Some(n),
                     Err(_) => usage_error(&format!(
