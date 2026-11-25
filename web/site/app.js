@@ -5,7 +5,8 @@ const $ = (id) => document.getElementById(id);
 const DEFAULT_LOCALES = ["tr", "en"];
 
 // ---------------------------------------------------------------- engine
-// The worker (and the ~0.5 MB engine) loads on first use, not on page load.
+// The worker (and the ~0.9 MB compressed engine) loads on first use, not on
+// page load.
 let worker = null;
 let nextId = 0;
 const pending = new Map();
@@ -221,6 +222,71 @@ function renderExample(ex) {
   });
   box.append(title, io, tryIt);
   return box;
+}
+
+// ---------------------------------------------------------------- copy buttons
+// Every [data-copy] block gets a button that copies its code text.
+const SVG_NS = "http://www.w3.org/2000/svg";
+const ICON_COPY = ["M9 9h10v10H9z", "M5 15V5h10"];
+const ICON_DONE = ["M5 12l5 5L19 7"];
+
+function setIcon(button, paths) {
+  const svg = document.createElementNS(SVG_NS, "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("aria-hidden", "true");
+  for (const d of paths) {
+    const path = document.createElementNS(SVG_NS, "path");
+    path.setAttribute("d", d);
+    svg.append(path);
+  }
+  button.querySelector("svg")?.remove();
+  button.prepend(svg);
+}
+
+function flash(button, text, ok) {
+  button.querySelector(".copy-tip")?.remove();
+  const tip = document.createElement("span");
+  tip.className = "copy-tip";
+  tip.setAttribute("role", "status");
+  tip.textContent = text;
+  button.append(tip);
+  button.classList.toggle("done", ok);
+  if (ok) setIcon(button, ICON_DONE);
+  clearTimeout(button.resetTimer);
+  button.resetTimer = setTimeout(() => {
+    tip.remove();
+    button.classList.remove("done");
+    setIcon(button, ICON_COPY);
+  }, 1600);
+}
+
+function selectText(node) {
+  const range = document.createRange();
+  range.selectNodeContents(node);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+for (const block of document.querySelectorAll("[data-copy]")) {
+  const source = block.querySelector("pre, code");
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "copy";
+  button.setAttribute("aria-label", "Copy to clipboard");
+  button.title = "Copy";
+  setIcon(button, ICON_COPY);
+  button.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(source.textContent);
+      flash(button, "Copied", true);
+    } catch {
+      // no clipboard access (insecure context, denied): select for Ctrl+C
+      selectText(source);
+      flash(button, "Press Ctrl+C", false);
+    }
+  });
+  block.append(button);
 }
 
 // ---------------------------------------------------------------- start

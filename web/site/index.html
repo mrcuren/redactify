@@ -6,84 +6,219 @@
 <!-- no network beyond this site: the engine runs here, in WebAssembly -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; connect-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
 <title>redactify</title>
-<meta name="description" content="Local-first PII detection, redaction and LLM guardrails in Rust. Try it in your browser: your text never leaves the page.">
+<meta name="description" content="Deterministic PII and secret redaction with an Allow / Log / Mask / Block decision, in Rust. Try the real engine in your browser: your text never leaves the page.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='3' width='2' height='10' fill='%231A1C22'/%3E%3Crect x='4' y='3' width='2' height='10' fill='%231A1C22'/%3E%3Crect x='7' y='3' width='2' height='10' fill='%231A1C22'/%3E%3Crect x='11' y='9' width='4' height='4' fill='%23136F7E'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a class="skip" href="#demo-title">Skip to the demo</a>
+
 <header class="top">
   <div class="wrap top-row">
-    <span class="brand">
-      <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><rect x="3" y="5" width="18" height="3" rx="1.5"/><rect x="3" y="10.5" width="12" height="3" rx="1.5"/><rect x="3" y="16" width="15" height="3" rx="1.5"/><circle cx="20" cy="12" r="2"/></svg>
-      redactify
-    </span>
-    <nav aria-label="Project links">
-      <a href="https://github.com/mrcuren/redactify">GitHub</a>
+    <a class="brand" href="./" aria-label="redactify home">
+      <svg class="mark" viewBox="0 0 16 16" width="26" height="26" aria-hidden="true"><rect class="bar" x="1" y="3" width="2" height="10"/><rect class="bar" x="4" y="3" width="2" height="10"/><rect class="bar" x="7" y="3" width="2" height="10"/><rect class="dot" x="11" y="9" width="4" height="4"/></svg>
+      <span class="wordmark">redactify</span>
+    </a>
+    <nav class="nav" aria-label="Project links">
       <a href="https://docs.rs/redactify">Docs</a>
       <a href="https://crates.io/crates/redactify">crates.io</a>
+      <a class="btn-square" href="https://github.com/mrcuren/redactify">GitHub</a>
+      <a class="btn-teal" href="#demo-title">Try it</a>
     </nav>
   </div>
 </header>
 
 <main>
-  <section class="hero wrap">
-    <h1>PII detection, redaction and LLM guardrails, checked by checksum.</h1>
-    <p class="lead">A deterministic Rust engine: identifiers are verified by their check digits, encodings are decoded before the decision, and one call returns Allow, Log, Mask or Block with the masked text.</p>
-    <p class="privacy"><span aria-hidden="true">&#128274;</span> The demo runs the real engine in your browser (WebAssembly). The text you type is never sent anywhere.</p>
-  </section>
-
-  <section class="wrap card" aria-labelledby="demo-title">
-    <h2 id="demo-title">Try it</h2>
-    <label for="input" class="field-label">Text to check</label>
-    <textarea id="input" rows="5" spellcheck="false">Müşteri TCKN 12345678950, kart 4111 1111 1111 1111, sipariş no 12345678951</textarea>
-    <div class="controls">
-      <label>Target
-        <select id="target">
-          <option value="user_prompt">user prompt</option>
-          <option value="tool_response">tool response</option>
-          <option value="model_output">model output</option>
-        </select>
-      </label>
-      <details class="locales">
-        <summary>Locale packs <span id="locale-summary">(tr, en)</span></summary>
-        <fieldset id="locale-list"><legend class="sr-only">Locale packs</legend></fieldset>
-      </details>
-      <button id="run" type="button">Analyze</button>
-    </div>
-    <p id="status" class="status" role="status">The engine loads on first use (about 0.5 MB).</p>
-    <div id="result" class="result" aria-live="polite" hidden>
-      <div class="decision-row">
-        <span id="decision" class="badge"></span>
-        <span id="rationale" class="rationale"></span>
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <p class="badge-pill">v0.1.0 &middot; open source &middot; MIT or Apache-2.0</p>
+    <h1 id="hero-title">Redaction you can <em>verify</em>, not guess.</h1>
+    <p class="lead">redactify masks personal data and secrets before an LLM, an agent or a log sees them. Identifiers are checked by their check digits, encodings are decoded before the decision, and every text gets one answer: Allow, Log, Mask or Block.</p>
+    <div class="hero-actions">
+      <div class="install" data-copy>
+        <span class="install-title">Install</span>
+        <code><span class="tok-cmd">cargo</span> <span class="tok-arg">add</span> redactify</code>
       </div>
-      <h3 class="out-title">Output <span id="remask-note" class="note" hidden>(on Block the library returns the raw text; shown here is the loggable re-mask the REST API returns)</span></h3>
-      <pre id="output" class="output"></pre>
-      <h3 class="out-title">Detected entities</h3>
-      <ul id="entities" class="entities"></ul>
+      <a class="btn-pill" href="https://docs.rs/redactify">Read the docs <span aria-hidden="true">&rarr;</span></a>
+    </div>
+    <ul class="facts" aria-label="At a glance">
+      <li><strong>26</strong> locales</li>
+      <li><strong>103</strong> entity types</li>
+      <li><strong>~0.1 ms</strong> per text</li>
+      <li><strong>0</strong> network calls</li>
+    </ul>
+  </section>
+
+  <section class="wrap demo-wrap" aria-labelledby="demo-title">
+    <div class="terminal">
+      <div class="chrome">
+        <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+        <h2 id="demo-title" class="chrome-title">Try it &mdash; the real engine, in your browser</h2>
+        <span class="local-tag"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M4 7V5a4 4 0 0 1 8 0v2h1v8H3V7h1zm2 0h4V5a2 2 0 0 0-4 0v2z"/></svg> stays on this page</span>
+      </div>
+      <div class="screen">
+        <label for="input" class="screen-label">Text to check</label>
+        <textarea id="input" rows="4" spellcheck="false">Müşteri TCKN 12345678950, kart 4111 1111 1111 1111, sipariş no 12345678951</textarea>
+        <div class="controls">
+          <label class="select">Target
+            <select id="target">
+              <option value="user_prompt">user prompt</option>
+              <option value="tool_response">tool response</option>
+              <option value="model_output">model output</option>
+            </select>
+          </label>
+          <details class="locales">
+            <summary>Locale packs <span id="locale-summary">(tr, en)</span></summary>
+            <fieldset id="locale-list"><legend class="sr-only">Locale packs</legend></fieldset>
+          </details>
+          <button id="run" class="run" type="button">Analyze <span aria-hidden="true">&#8629;</span></button>
+        </div>
+        <p id="status" class="status" role="status">The engine (about 0.9 MB of WebAssembly, compressed) loads on first use. Nothing you type is sent anywhere.</p>
+        <div id="result" class="result" aria-live="polite" hidden>
+          <div class="decision-row">
+            <span id="decision" class="badge"></span>
+            <span id="rationale" class="rationale"></span>
+          </div>
+          <h3 class="screen-label">Output <span id="remask-note" class="note" hidden>(on Block the library returns the raw text; shown here is the loggable re-mask the REST API returns)</span></h3>
+          <pre id="output" class="output"></pre>
+          <h3 class="screen-label">Detected entities</h3>
+          <ul id="entities" class="entities"></ul>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="wrap" aria-labelledby="gallery-title">
-    <h2 id="gallery-title">Examples</h2>
-    <p class="muted">Every output below was produced by the engine itself when this page was built.</p>
-    <div id="tabs" class="tabs" role="tablist" aria-label="Example groups"></div>
-    <div id="panels"></div>
+  <section class="wrap section" aria-labelledby="why-title">
+    <h2 id="why-title" class="section-title">Why redactify</h2>
+    <div class="grid">
+      <article class="tile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>
+        <h3>Checksums, not guesses</h3>
+        <p>Mod-97, Luhn, Verhoeff, ISO 7064 and national algorithms. A digit run that fails its check stays, so order numbers survive.</p>
+      </article>
+      <article class="tile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h13"/></svg>
+        <h3>A decision, not just spans</h3>
+        <p>One call returns Allow, Log, Mask or Block with a rationale, the masked text and the evidence behind it.</p>
+      </article>
+      <article class="tile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l-5 6 5 6M16 6l5 6-5 6"/></svg>
+        <h3>Built for hostile input</h3>
+        <p>Fullwidth digits, zero-width characters and base64, percent or HTML encodings are decoded and scanned again.</p>
+      </article>
+      <article class="tile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+        <h3>Deterministic</h3>
+        <p>No model, no sampling, no network in the core. The same input gives the same output, byte for byte, batch or streaming.</p>
+      </article>
+      <article class="tile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="1"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        <h3>Reversible pseudonymization</h3>
+        <p>The vault swaps values for consistent placeholders and restores them for the caller who holds the mapping.</p>
+      </article>
+      <article class="tile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M7 9l3 3-3 3M12 15h5"/></svg>
+        <h3>Library, REST, MCP, WASM</h3>
+        <p>A Rust crate, an HTTP server in Docker, an MCP server for agents, and this page: the same engine everywhere.</p>
+      </article>
+    </div>
   </section>
 
-  <section class="wrap card" aria-labelledby="install-title">
-    <h2 id="install-title">Use it</h2>
-    <h3>Rust</h3>
-    <pre class="code">cargo add redactify</pre>
-    <pre class="code">assert_eq!(redactify::redact("TCKN 12345678950"), "TCKN [TCKN]");</pre>
-    <h3>REST server (Docker, from a checkout)</h3>
-    <pre class="code">docker compose up -d --build
-curl -s localhost:8080/v1/sanitize -H 'content-type: application/json' \
-  -d '{"text":"TCKN 12345678950"}'</pre>
+  <section class="wrap section" aria-labelledby="perf-title">
+    <h2 id="perf-title" class="section-title">Performance</h2>
+    <p class="section-lead">Fast enough to sit in front of every prompt, tool call and log line. Every figure below comes from a named test or benchmark, listed in the <a href="https://github.com/mrcuren/redactify#validation">validation table</a>.</p>
+    <div class="kpis">
+      <div class="kpi">
+        <p class="kpi-label">Detect and redact, per text</p>
+        <p class="kpi-value">0.073 ms</p>
+        <p class="kpi-note">mean over 1,025 texts, single thread, in-process</p>
+      </div>
+      <div class="kpi">
+        <p class="kpi-label">Full guard chain, per text</p>
+        <p class="kpi-value">0.085 ms</p>
+        <p class="kpi-note">same 1,025 texts, every guard check up to the decision</p>
+      </div>
+      <div class="kpi">
+        <p class="kpi-label">REST server, one client</p>
+        <p class="kpi-value">1,785 req/s</p>
+        <p class="kpi-note">p50 0.26 ms, p95 0.66 ms, a new TCP connection per request</p>
+      </div>
+      <div class="kpi">
+        <p class="kpi-label">REST server, four clients</p>
+        <p class="kpi-value">9,521 req/s</p>
+        <p class="kpi-note">four concurrent clients, same container</p>
+      </div>
+    </div>
+    <div class="perf-split">
+      <div class="perf-table">
+        <table>
+          <caption>Cost grows linearly with input size</caption>
+          <thead>
+            <tr><th scope="col">Input</th><th scope="col">Time</th><th scope="col">Per MiB</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">1 MiB</th><td>1.15 s</td><td>1.15 s</td></tr>
+            <tr><th scope="row">2 MiB</th><td>2.27 s</td><td>1.14 s</td></tr>
+            <tr><th scope="row">4 MiB</th><td>4.44 s</td><td>1.11 s</td></tr>
+          </tbody>
+        </table>
+        <p class="fine">Mixed Turkish text with PII, CLI <code>--json</code>, median of 3 runs.</p>
+      </div>
+      <div class="perf-own">
+        <h3>Measure it yourself</h3>
+        <p>The demo above prints how long each analysis took, in your own browser. On your machine:</p>
+        <div class="codebox" data-copy><pre class="code"><span class="tok-cmd">cargo</span> bench --bench pii</pre></div>
+        <div class="codebox" data-copy><pre class="code"><span class="tok-cmd">cargo</span> run --release --features api \
+  --example api_bench</pre></div>
+      </div>
+    </div>
+    <p class="fine">Release build in a <code>rust:1-trixie</code> container on Docker Desktop, Intel i7-13620H host. Your numbers will differ with hardware and text length.</p>
+  </section>
+
+  <section class="wrap section" aria-labelledby="gallery-title">
+    <h2 id="gallery-title" class="section-title">Examples</h2>
+    <p class="section-lead">Every output below was produced by the engine itself when this page was built.</p>
+    <div id="tabs" class="tabs" role="tablist" aria-label="Example groups"></div>
+    <div id="panels" class="panels"></div>
+  </section>
+
+  <section class="wrap section" aria-labelledby="install-title">
+    <div class="cta">
+      <p class="badge-pill on-teal">Three ways in</p>
+      <h2 id="install-title">Put it in front of your model.</h2>
+      <div class="cta-grid">
+        <div class="cta-item">
+          <h3>Rust library</h3>
+          <div class="codebox" data-copy><pre class="code"><span class="tok-cmd">cargo</span> add redactify</pre></div>
+          <div class="codebox" data-copy><pre class="code">redactify::redact(<span class="tok-str">"TCKN 12345678950"</span>)
+<span class="tok-com">// "TCKN [TCKN]"</span></pre></div>
+        </div>
+        <div class="cta-item">
+          <h3>REST server (Docker, from a checkout)</h3>
+          <div class="codebox" data-copy><pre class="code"><span class="tok-cmd">docker</span> compose up -d --build
+<span class="tok-cmd">curl</span> -s localhost:8080/v1/sanitize \
+  -H <span class="tok-str">'content-type: application/json'</span> \
+  -d <span class="tok-str">'{"text":"TCKN 12345678950"}'</span></pre></div>
+        </div>
+        <div class="cta-item">
+          <h3>MCP server for agents</h3>
+          <div class="codebox" data-copy><pre class="code"><span class="tok-cmd">cargo</span> install redactify-mcp
+<span class="tok-cmd">redactify-mcp</span>   <span class="tok-com"># stdio, agent tier</span></pre></div>
+        </div>
+      </div>
+    </div>
   </section>
 </main>
 
-<footer class="wrap foot">
-  <p>MIT or Apache-2.0 (Unicode data tables: Unicode-3.0). An identifier redactor, not a compliance guarantee.</p>
+<footer class="foot">
+  <div class="wrap foot-row">
+    <span class="brand small">
+      <svg class="mark" viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><rect class="bar" x="1" y="3" width="2" height="10"/><rect class="bar" x="4" y="3" width="2" height="10"/><rect class="bar" x="7" y="3" width="2" height="10"/><rect class="dot" x="11" y="9" width="4" height="4"/></svg>
+      redactify
+    </span>
+    <p>MIT or Apache-2.0 (Unicode data tables: Unicode-3.0). An identifier redactor, not a compliance guarantee.</p>
+  </div>
 </footer>
 <script type="module" src="app.js"></script>
 </body>
