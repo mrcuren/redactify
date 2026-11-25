@@ -10,6 +10,10 @@ on:
     branches: [main]
   pull_request:
 
+# read-only token by default; a job that needs more asks for it
+permissions:
+  contents: read
+
 env:
   CARGO_TERM_COLOR: always
 
