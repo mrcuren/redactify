@@ -1,11 +1,20 @@
 # Weekly dependency updates: Cargo manifests + GitHub Actions versions.
+# Patch-level Cargo updates arrive as one grouped pull request; minor and
+# major ones stay separate (a 0.x minor bump can break the API). Action
+# updates are grouped as well.
 version: 2
 updates:
   - package-ecosystem: cargo
     directory: /
     schedule:
       interval: weekly
+    groups:
+      cargo-patch:
+        update-types: [patch]
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    groups:
+      github-actions:
+        patterns: ["*"]
