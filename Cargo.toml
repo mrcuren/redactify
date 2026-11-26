@@ -105,7 +105,7 @@ aho-corasick = "1.1"
 # unicode-normalization: guardrails L0 - NFKC (homoglyph/fullwidth evasion defense).
 unicode-normalization = "0.1"
 # base64: guardrails L0 - suspect payload decoding + re-scan.
-base64 = "0.22"
+base64 = "0.23"
 # serde_json: guardrails L4 - JSON schema validation of LLM output.
 serde_json.workspace = true
 # serde: optional Serialize/Deserialize on the public data types (behind the

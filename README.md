@@ -11,6 +11,10 @@
 
 <p align="center">
   <a href="https://github.com/mrcuren/redactify/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/mrcuren/redactify/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://crates.io/crates/redactify"><img alt="crates.io" src="https://img.shields.io/crates/v/redactify?logo=rust"></a>
+  <a href="https://docs.rs/redactify"><img alt="docs.rs" src="https://img.shields.io/docsrs/redactify?logo=docsdotrs"></a>
+  <a href="#optional-ml-layer"><img alt="MSRV" src="https://img.shields.io/crates/msrv/redactify?logo=rust"></a>
+  <a href="#quick-start-docker"><img alt="Docker: compose up" src="https://img.shields.io/badge/docker-compose%20up-2496ED?logo=docker&amp;logoColor=white"></a>
   <a href="NOTICE"><img alt="License: MIT OR Apache-2.0" src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg"></a>
 </p>
 
